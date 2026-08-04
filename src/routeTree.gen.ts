@@ -14,6 +14,7 @@ import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as BudgetsRouteImport } from './routes/budgets'
 import { Route as GoalsRouteImport } from './routes/goals'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as TransactionsRouteImport } from './routes/transactions'
 
@@ -42,6 +43,11 @@ const GoalsRoute = GoalsRouteImport.update({
   path: '/goals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReportsRoute = ReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
   '/goals': typeof GoalsRoute
+  '/notifications': typeof NotificationsRoute
   '/reports': typeof ReportsRoute
   '/transactions': typeof TransactionsRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
   '/goals': typeof GoalsRoute
+  '/notifications': typeof NotificationsRoute
   '/reports': typeof ReportsRoute
   '/transactions': typeof TransactionsRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
   '/goals': typeof GoalsRoute
+  '/notifications': typeof NotificationsRoute
   '/reports': typeof ReportsRoute
   '/transactions': typeof TransactionsRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/budgets'
     | '/goals'
+    | '/notifications'
     | '/reports'
     | '/transactions'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/budgets'
     | '/goals'
+    | '/notifications'
     | '/reports'
     | '/transactions'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/budgets'
     | '/goals'
+    | '/notifications'
     | '/reports'
     | '/transactions'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   AssistantRoute: typeof AssistantRoute
   BudgetsRoute: typeof BudgetsRoute
   GoalsRoute: typeof GoalsRoute
+  NotificationsRoute: typeof NotificationsRoute
   ReportsRoute: typeof ReportsRoute
   TransactionsRoute: typeof TransactionsRoute
 }
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GoalsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reports': {
       id: '/reports'
       path: '/reports'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   AssistantRoute: AssistantRoute,
   BudgetsRoute: BudgetsRoute,
   GoalsRoute: GoalsRoute,
+  NotificationsRoute: NotificationsRoute,
   ReportsRoute: ReportsRoute,
   TransactionsRoute: TransactionsRoute,
 }
