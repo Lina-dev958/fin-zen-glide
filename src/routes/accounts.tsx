@@ -85,7 +85,7 @@ function AccountsPage() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Account | null>(null);
   const [draft, setDraft] = useState<Draft>(emptyDraft);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<{ name?: string; balance?: string }>({});
   const [saving, setSaving] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | AccountType>("all");
@@ -113,7 +113,7 @@ function AccountsPage() {
   };
 
   const submit = async () => {
-    const next: Record<string, string> = {};
+    const next: { name?: string; balance?: string } = {};
     if (!draft.name.trim()) next.name = t("common.required");
     if (draft.balance === "" || Number.isNaN(Number(draft.balance)))
       next.balance = t("common.invalidAmount");
