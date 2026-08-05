@@ -146,6 +146,69 @@ function Dashboard() {
         />
       </div>
 
+      <SectionCard
+        title={t("dash.accountsSplit")}
+        subtitle={t("dash.accountsSplitSub")}
+        className="mb-6"
+        action={
+          <Button asChild variant="ghost" size="sm">
+            <Link to="/accounts">{t("common.viewAll")}</Link>
+          </Button>
+        }
+      >
+        <div className="grid gap-4 lg:grid-cols-2">
+          {groups.map((g) => (
+            <BalanceGroup key={g.type} group={g} />
+          ))}
+        </div>
+      </SectionCard>
+
+      <SectionCard title={t("dash.stats")} subtitle={t("dash.statsSub")} className="mb-6">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {[
+            {
+              label: t("dash.savingsRate"),
+              value: `${savingsRate}%`,
+              icon: <PiggyBank className="size-4" />,
+            },
+            {
+              label: t("dash.avgDaily"),
+              value: money(avgDaily),
+              icon: <Receipt className="size-4" />,
+            },
+            {
+              label: t("dash.txCount"),
+              value: String(transactions.length),
+              icon: <ArrowLeftRight className="size-4" />,
+            },
+            {
+              label: t("dash.topCategory"),
+              value: topCategory
+                ? lang === "ar"
+                  ? topCategory.categoryAr
+                  : topCategory.category
+                : "—",
+              icon: <Target className="size-4" />,
+            },
+          ].map((s) => (
+            <div
+              key={s.label}
+              className="flex items-center gap-3 rounded-xl border bg-surface-muted p-4"
+            >
+              <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-muted text-primary">
+                {s.icon}
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-xs text-muted-foreground">{s.label}</p>
+                <p className="truncate font-display text-lg font-bold tabular-nums">{s.value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+
+
       <div className="grid gap-6 xl:grid-cols-3">
         <SectionCard
           title={t("dash.cashflow")}
