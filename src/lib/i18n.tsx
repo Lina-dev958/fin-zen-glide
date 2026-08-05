@@ -105,6 +105,30 @@ export const dict: Dict = {
   "dash.vsLast": { en: "vs last month", ar: "مقارنة بالشهر الماضي" },
   "dash.due": { en: "Due", ar: "الاستحقاق" },
   "dash.pay": { en: "Pay now", ar: "ادفع الآن" },
+  "dash.stats": { en: "General statistics", ar: "إحصائيات عامة" },
+  "dash.statsSub": {
+    en: "A quick pulse on this month's activity.",
+    ar: "نظرة سريعة على نشاط هذا الشهر.",
+  },
+  "dash.savingsRate": { en: "Savings rate", ar: "معدل الادخار" },
+  "dash.avgDaily": { en: "Avg. daily spend", ar: "متوسط الإنفاق اليومي" },
+  "dash.txCount": { en: "Transactions", ar: "عدد المعاملات" },
+  "dash.topCategory": { en: "Top category", ar: "أعلى فئة إنفاق" },
+  "dash.accountsSplit": { en: "Where your money is", ar: "أين تتوزع أموالك" },
+  "dash.accountsSplitSub": {
+    en: "Total cash and total bank balance, broken down per account.",
+    ar: "إجمالي الكاش وإجمالي الرصيد البنكي مع تفرعات كل حساب.",
+  },
+  "dash.totalCash": { en: "Total cash", ar: "إجمالي الكاش" },
+  "dash.totalBank": { en: "Total bank", ar: "إجمالي البنوك" },
+  "dash.totalWallets": { en: "Total wallets", ar: "إجمالي المحافظ" },
+  "dash.totalCards": { en: "Total cards", ar: "إجمالي البطاقات" },
+  "dash.accountsCount": { en: "accounts", ar: "حسابات" },
+  "dash.showDetails": { en: "Show accounts", ar: "عرض الحسابات" },
+  "dash.hideDetails": { en: "Hide accounts", ar: "إخفاء الحسابات" },
+  "dash.shareOfTotal": { en: "of total", ar: "من الإجمالي" },
+
+
 
   "acc.title": { en: "Accounts", ar: "الحسابات" },
   "acc.sub": {
