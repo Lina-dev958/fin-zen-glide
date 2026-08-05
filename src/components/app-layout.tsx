@@ -162,7 +162,7 @@ function Topbar() {
   const [query, setQuery] = useState("");
 
   return (
-    <header className="sticky top-0 z-30 glass-panel border-x-0 border-t-0">
+    <header className="sticky top-0 z-30 border-b bg-sidebar/85 backdrop-blur-xl backdrop-saturate-150">
       <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
         <Sheet>
           <SheetTrigger asChild>
