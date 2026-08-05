@@ -3,14 +3,21 @@ import {
   ArrowLeftRight,
   Banknote,
   CalendarClock,
+  ChevronDown,
+  Coins,
+  CreditCard,
+  Landmark,
   Minus,
+  PiggyBank,
   Plus,
+  Receipt,
   Sparkles,
   Target,
   TrendingDown,
   TrendingUp,
   Wallet,
 } from "lucide-react";
+
 import { useEffect, useState } from "react";
 import {
   Area,
@@ -66,9 +73,84 @@ const PIE_COLORS = [
   "var(--color-chart-5)",
 ];
 
+type AccountGroup = {
+  type: string;
+  label: string;
+  icon: typeof Coins;
+  total: number;
+  accounts: ReturnType<typeof useStore>["accounts"];
+};
+
+function BalanceGroup({ group }: { group: AccountGroup }) {
+  const { t, lang, money } = useI18n();
+  const [open, setOpen] = useState(true);
+  const Icon = group.icon;
+  const max = Math.max(...group.accounts.map((a) => Math.abs(a.balance)), 1);
+
+  return (
+    <div className="rounded-2xl border bg-surface-muted p-4">
+      <div className="flex items-center gap-3">
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+          <Icon className="size-5" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-xs text-muted-foreground">{group.label}</p>
+          <p className="font-display text-xl font-bold tabular-nums">{money(group.total)}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="focus-ringed flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <span className="hidden sm:inline">
+            {open ? t("dash.hideDetails") : t("dash.showDetails")}
+          </span>
+          <span className="tabular-nums sm:hidden">{group.accounts.length}</span>
+          <ChevronDown className={cn("size-4 transition-transform", open && "rotate-180")} />
+        </button>
+      </div>
+
+      {open && (
+        <ul className="mt-4 space-y-3 border-t pt-3">
+          {group.accounts.length === 0 && (
+            <li className="text-xs text-muted-foreground">{t("common.empty")}</li>
+          )}
+          {group.accounts.map((a) => (
+            <li key={a.id}>
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="min-w-0 truncate font-medium">
+                  {lang === "ar" ? a.nameAr : a.name}
+                </span>
+                <span
+                  className={cn(
+                    "shrink-0 tabular-nums",
+                    a.balance < 0 ? "text-destructive" : "text-foreground",
+                  )}
+                >
+                  {money(a.balance)}
+                </span>
+              </div>
+              <div className="mt-1 flex items-center gap-2">
+                <ProgressBar
+                  value={Math.round((Math.abs(a.balance) / max) * 100)}
+                  tone={a.balance < 0 ? "danger" : "brand"}
+                />
+                <span className="w-24 shrink-0 truncate text-[11px] text-muted-foreground">
+                  {a.institution}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function Dashboard() {
   const { t, lang, money } = useI18n();
-  const { transactions, budgets, goals } = useStore();
+  const { transactions, budgets, goals, accounts } = useStore();
   const totals = useTotals();
   const categories = useCategoryBreakdown().slice(0, 5);
   const [loading, setLoading] = useState(true);
@@ -78,12 +160,30 @@ function Dashboard() {
     return () => clearTimeout(id);
   }, []);
 
+  const byType = (type: string) => accounts.filter((a) => a.type === type);
+  const sum = (list: typeof accounts) => list.reduce((s, a) => s + a.balance, 0);
+
+  const groups: AccountGroup[] = [
+    { type: "cash", label: t("dash.totalCash"), icon: Coins },
+    { type: "bank", label: t("dash.totalBank"), icon: Landmark },
+    { type: "wallet", label: t("dash.totalWallets"), icon: Wallet },
+    { type: "card", label: t("dash.totalCards"), icon: CreditCard },
+  ].map((g) => {
+    const list = byType(g.type);
+    return { ...g, total: sum(list), accounts: list };
+  });
+
+  const savingsRate = totals.income > 0 ? Math.round((totals.savings / totals.income) * 100) : 0;
+  const avgDaily = Math.round(totals.expenses / 30);
+  const topCategory = categories[0];
+
   const quick = [
     { key: "dash.addIncome", icon: Plus, to: "/transactions" as const },
     { key: "dash.addExpense", icon: Minus, to: "/transactions" as const },
     { key: "dash.transfer", icon: ArrowLeftRight, to: "/transactions" as const },
     { key: "dash.newGoal", icon: Target, to: "/goals" as const },
   ];
+
 
   return (
     <AppLayout>
@@ -145,6 +245,69 @@ function Dashboard() {
           icon={<Banknote className="size-4" />}
         />
       </div>
+
+      <SectionCard
+        title={t("dash.accountsSplit")}
+        subtitle={t("dash.accountsSplitSub")}
+        className="mb-6"
+        action={
+          <Button asChild variant="ghost" size="sm">
+            <Link to="/accounts">{t("common.viewAll")}</Link>
+          </Button>
+        }
+      >
+        <div className="grid gap-4 lg:grid-cols-2">
+          {groups.map((g) => (
+            <BalanceGroup key={g.type} group={g} />
+          ))}
+        </div>
+      </SectionCard>
+
+      <SectionCard title={t("dash.stats")} subtitle={t("dash.statsSub")} className="mb-6">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {[
+            {
+              label: t("dash.savingsRate"),
+              value: `${savingsRate}%`,
+              icon: <PiggyBank className="size-4" />,
+            },
+            {
+              label: t("dash.avgDaily"),
+              value: money(avgDaily),
+              icon: <Receipt className="size-4" />,
+            },
+            {
+              label: t("dash.txCount"),
+              value: String(transactions.length),
+              icon: <ArrowLeftRight className="size-4" />,
+            },
+            {
+              label: t("dash.topCategory"),
+              value: topCategory
+                ? lang === "ar"
+                  ? topCategory.categoryAr
+                  : topCategory.category
+                : "—",
+              icon: <Target className="size-4" />,
+            },
+          ].map((s) => (
+            <div
+              key={s.label}
+              className="flex items-center gap-3 rounded-xl border bg-surface-muted p-4"
+            >
+              <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-muted text-primary">
+                {s.icon}
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-xs text-muted-foreground">{s.label}</p>
+                <p className="truncate font-display text-lg font-bold tabular-nums">{s.value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+
 
       <div className="grid gap-6 xl:grid-cols-3">
         <SectionCard
