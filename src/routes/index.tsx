@@ -3,14 +3,21 @@ import {
   ArrowLeftRight,
   Banknote,
   CalendarClock,
+  ChevronDown,
+  Coins,
+  CreditCard,
+  Landmark,
   Minus,
+  PiggyBank,
   Plus,
+  Receipt,
   Sparkles,
   Target,
   TrendingDown,
   TrendingUp,
   Wallet,
 } from "lucide-react";
+
 import { useEffect, useState } from "react";
 import {
   Area,
