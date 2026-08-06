@@ -218,32 +218,66 @@ function Dashboard() {
         </div>
       </section>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          label={t("dash.totalCash")}
-          value={money(sum(byType("cash")))}
-          delta={3.4}
-          icon={<Coins className="size-4" />}
-        />
-        <StatCard
-          label={t("dash.totalBank")}
-          value={money(sum(byType("bank")))}
-          delta={8.2}
-          icon={<Landmark className="size-4" />}
-        />
-        <StatCard
-          label={t("dash.totalWallets")}
-          value={money(sum(byType("wallet")))}
-          delta={1.9}
-          icon={<Wallet className="size-4" />}
-        />
-        <StatCard
-          label={t("dash.totalCards")}
-          value={money(sum(byType("card")))}
-          delta={-4.1}
-          icon={<CreditCard className="size-4" />}
-        />
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {groups.map((g, i) => (
+          <button
+            key={g.type}
+            type="button"
+            onClick={() => setDetails(g.type)}
+            aria-label={`${g.label} — ${t("dash.showDetails")}`}
+            className="focus-ringed cursor-pointer text-start"
+          >
+            <StatCard
+              label={g.label}
+              value={money(g.total)}
+              delta={[3.4, 8.2, 1.9][i]}
+              icon={<g.icon className="size-4" />}
+            />
+          </button>
+        ))}
       </div>
+
+      <Dialog open={details !== null} onOpenChange={(o) => !o && setDetails(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="font-display">{activeGroup?.label}</DialogTitle>
+            <DialogDescription>{t("dash.accountsSplitSub")}</DialogDescription>
+          </DialogHeader>
+          {activeGroup && (
+            <>
+              <p className="font-display text-3xl font-bold tabular-nums">
+                {money(activeGroup.total)}
+              </p>
+              <ul className="mt-2 divide-y">
+                {activeGroup.accounts.length === 0 && (
+                  <li className="py-3 text-sm text-muted-foreground">{t("common.empty")}</li>
+                )}
+                {activeGroup.accounts.map((a) => (
+                  <li key={a.id} className="flex items-center justify-between gap-3 py-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">
+                        {lang === "ar" ? a.nameAr : a.name}
+                      </p>
+                      <p className="truncate text-xs text-muted-foreground">{a.institution}</p>
+                    </div>
+                    <span
+                      className={cn(
+                        "shrink-0 text-sm font-semibold tabular-nums",
+                        a.balance < 0 ? "text-destructive" : "text-foreground",
+                      )}
+                    >
+                      {money(a.balance)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <Button asChild variant="outline" className="mt-2 w-full rounded-xl">
+                <Link to="/accounts">{t("common.viewAll")}</Link>
+              </Button>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <SectionCard
         title={t("dash.accountsSplit")}
@@ -261,6 +295,7 @@ function Dashboard() {
           ))}
         </div>
       </SectionCard>
+
 
       <SectionCard title={t("dash.stats")} subtitle={t("dash.statsSub")} className="mb-6">
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
