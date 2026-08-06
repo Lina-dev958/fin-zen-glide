@@ -221,28 +221,28 @@ function Dashboard() {
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
-          label={t("dash.totalBalance")}
-          value={money(totals.totalBalance)}
+          label={t("dash.totalCash")}
+          value={money(sum(byType("cash")))}
+          delta={3.4}
+          icon={<Coins className="size-4" />}
+        />
+        <StatCard
+          label={t("dash.totalBank")}
+          value={money(sum(byType("bank")))}
           delta={8.2}
+          icon={<Landmark className="size-4" />}
+        />
+        <StatCard
+          label={t("dash.totalWallets")}
+          value={money(sum(byType("wallet")))}
+          delta={1.9}
           icon={<Wallet className="size-4" />}
         />
         <StatCard
-          label={t("dash.income")}
-          value={money(totals.income)}
-          delta={12.4}
-          icon={<TrendingUp className="size-4" />}
-        />
-        <StatCard
-          label={t("dash.expenses")}
-          value={money(totals.expenses)}
+          label={t("dash.totalCards")}
+          value={money(sum(byType("card")))}
           delta={-4.1}
-          icon={<TrendingDown className="size-4" />}
-        />
-        <StatCard
-          label={t("dash.savings")}
-          value={money(totals.savings)}
-          delta={6.7}
-          icon={<Banknote className="size-4" />}
+          icon={<CreditCard className="size-4" />}
         />
       </div>
 
