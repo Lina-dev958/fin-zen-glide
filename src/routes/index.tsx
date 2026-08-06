@@ -4,7 +4,6 @@ import {
   CalendarClock,
   ChevronDown,
   Coins,
-  CreditCard,
   Landmark,
   Minus,
   PiggyBank,
@@ -34,6 +33,13 @@ import { AppLayout } from "@/components/app-layout";
 import { EmptyState, ListSkeleton, ProgressBar, SectionCard, StatCard } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useI18n } from "@/lib/i18n";
 import {
   aiInsights,
@@ -153,6 +159,7 @@ function Dashboard() {
   const totals = useTotals();
   const categories = useCategoryBreakdown().slice(0, 5);
   const [loading, setLoading] = useState(true);
+  const [details, setDetails] = useState<string | null>(null);
 
   useEffect(() => {
     const id = setTimeout(() => setLoading(false), 700);
@@ -166,11 +173,12 @@ function Dashboard() {
     { type: "cash", label: t("dash.totalCash"), icon: Coins },
     { type: "bank", label: t("dash.totalBank"), icon: Landmark },
     { type: "wallet", label: t("dash.totalWallets"), icon: Wallet },
-    { type: "card", label: t("dash.totalCards"), icon: CreditCard },
   ].map((g) => {
     const list = byType(g.type);
     return { ...g, total: sum(list), accounts: list };
   });
+
+  const activeGroup = groups.find((g) => g.type === details);
 
   const savingsRate = totals.income > 0 ? Math.round((totals.savings / totals.income) * 100) : 0;
   const avgDaily = Math.round(totals.expenses / 30);
@@ -230,7 +238,7 @@ function Dashboard() {
             <StatCard
               label={g.label}
               value={money(g.total)}
-              delta={[3.4, 8.2, 1.9][i]}
+              delta={[3.4, 8.2, 1.9][i] ?? 0}
               icon={<g.icon className="size-4" />}
             />
           </button>
