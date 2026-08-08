@@ -333,6 +333,10 @@ function OperationsPage() {
           )}
         </SectionCard>
       </div>
+      {capture && (
+        <CaptureDialog mode={capture} open onOpenChange={(v) => !v && setCapture(null)} />
+      )}
     </AppLayout>
+
   );
 }
