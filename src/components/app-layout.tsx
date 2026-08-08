@@ -46,6 +46,9 @@ const groups = [
       { to: "/", key: "nav.dashboard", icon: LayoutDashboard },
       { to: "/accounts", key: "nav.accounts", icon: Wallet },
       { to: "/transactions", key: "nav.transactions", icon: BadgeDollarSign },
+      { to: "/recurring", key: "nav.recurring", icon: Repeat },
+      { to: "/import", key: "nav.import", icon: FileUp },
+
     ],
   },
   {
