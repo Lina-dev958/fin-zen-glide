@@ -4,6 +4,8 @@ import { Camera, Loader2, Mic, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppLayout } from "@/components/app-layout";
+import { CaptureDialog, type CaptureMode } from "@/components/capture-dialog";
+
 import { EmptyState, SectionCard } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -78,6 +80,8 @@ function OperationsPage() {
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [capture, setCapture] = useState<CaptureMode | null>(null);
+
 
   const list = useMemo(
     () =>
@@ -150,19 +154,20 @@ function OperationsPage() {
             </div>
             <p className="mt-2 text-sm text-muted-foreground">{t("ops.smartSub")}</p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <Button onClick={() => toast.info(t("ops.soon"))} className="rounded-xl">
-                <Mic className="size-4" />
-                {t("ops.voice")}
+              <Button onClick={() => setCapture("receipt")} className="rounded-xl">
+                <Camera className="size-4" />
+                {t("cap.receipt")}
               </Button>
               <Button
                 variant="outline"
-                onClick={() => toast.info(t("ops.soon"))}
+                onClick={() => setCapture("transfer")}
                 className="rounded-xl"
               >
-                <Camera className="size-4" />
-                {t("ops.photo")}
+                <Mic className="size-4" />
+                {t("cap.transfer")}
               </Button>
             </div>
+
           </section>
 
           <SectionCard title={t("ops.new")}>
@@ -328,6 +333,10 @@ function OperationsPage() {
           )}
         </SectionCard>
       </div>
+      {capture && (
+        <CaptureDialog mode={capture} open onOpenChange={(v) => !v && setCapture(null)} />
+      )}
     </AppLayout>
+
   );
 }

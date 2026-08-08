@@ -14,7 +14,9 @@ import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as BudgetsRouteImport } from './routes/budgets'
 import { Route as GoalsRouteImport } from './routes/goals'
+import { Route as ImportRouteImport } from './routes/import'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as RecurringRouteImport } from './routes/recurring'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TransactionsRouteImport } from './routes/transactions'
@@ -44,9 +46,19 @@ const GoalsRoute = GoalsRouteImport.update({
   path: '/goals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImportRoute = ImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecurringRoute = RecurringRouteImport.update({
+  id: '/recurring',
+  path: '/recurring',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportsRoute = ReportsRouteImport.update({
@@ -71,7 +83,9 @@ export interface FileRoutesByFullPath {
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
   '/goals': typeof GoalsRoute
+  '/import': typeof ImportRoute
   '/notifications': typeof NotificationsRoute
+  '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/transactions': typeof TransactionsRoute
@@ -82,7 +96,9 @@ export interface FileRoutesByTo {
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
   '/goals': typeof GoalsRoute
+  '/import': typeof ImportRoute
   '/notifications': typeof NotificationsRoute
+  '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/transactions': typeof TransactionsRoute
@@ -94,7 +110,9 @@ export interface FileRoutesById {
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
   '/goals': typeof GoalsRoute
+  '/import': typeof ImportRoute
   '/notifications': typeof NotificationsRoute
+  '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/transactions': typeof TransactionsRoute
@@ -107,7 +125,9 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/budgets'
     | '/goals'
+    | '/import'
     | '/notifications'
+    | '/recurring'
     | '/reports'
     | '/settings'
     | '/transactions'
@@ -118,7 +138,9 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/budgets'
     | '/goals'
+    | '/import'
     | '/notifications'
+    | '/recurring'
     | '/reports'
     | '/settings'
     | '/transactions'
@@ -129,7 +151,9 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/budgets'
     | '/goals'
+    | '/import'
     | '/notifications'
+    | '/recurring'
     | '/reports'
     | '/settings'
     | '/transactions'
@@ -141,7 +165,9 @@ export interface RootRouteChildren {
   AssistantRoute: typeof AssistantRoute
   BudgetsRoute: typeof BudgetsRoute
   GoalsRoute: typeof GoalsRoute
+  ImportRoute: typeof ImportRoute
   NotificationsRoute: typeof NotificationsRoute
+  RecurringRoute: typeof RecurringRoute
   ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
   TransactionsRoute: typeof TransactionsRoute
@@ -184,11 +210,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GoalsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/import': {
+      id: '/import'
+      path: '/import'
+      fullPath: '/import'
+      preLoaderRoute: typeof ImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications': {
       id: '/notifications'
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recurring': {
+      id: '/recurring'
+      path: '/recurring'
+      fullPath: '/recurring'
+      preLoaderRoute: typeof RecurringRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reports': {
@@ -221,7 +261,9 @@ const rootRouteChildren: RootRouteChildren = {
   AssistantRoute: AssistantRoute,
   BudgetsRoute: BudgetsRoute,
   GoalsRoute: GoalsRoute,
+  ImportRoute: ImportRoute,
   NotificationsRoute: NotificationsRoute,
+  RecurringRoute: RecurringRoute,
   ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,
   TransactionsRoute: TransactionsRoute,
@@ -229,13 +271,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

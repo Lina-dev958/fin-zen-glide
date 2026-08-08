@@ -1,3 +1,4 @@
+import { useRouterState } from "@tanstack/react-router";
 import {
   createContext,
   useCallback,
@@ -7,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+
 
 export type Lang = "en" | "ar";
 
@@ -38,6 +40,8 @@ export const dict: Dict = {
   "common.edit": { en: "Edit", ar: "تعديل" },
   "common.delete": { en: "Delete", ar: "حذف" },
   "common.cancel": { en: "Cancel", ar: "إلغاء" },
+  "common.confirm": { en: "Confirm", ar: "تأكيد" },
+
   "common.save": { en: "Save", ar: "حفظ" },
   "common.saving": { en: "Saving…", ar: "جارٍ الحفظ…" },
   "common.details": { en: "Details", ar: "التفاصيل" },
@@ -169,7 +173,185 @@ export const dict: Dict = {
 
 
 
+
+  "nav.recurring": { en: "Recurring", ar: "العمليات المتكررة" },
+  "nav.import": { en: "Import", ar: "استيراد البيانات" },
+
+  "rec.title": { en: "Recurring operations", ar: "العمليات المتكررة" },
+  "rec.sub": {
+    en: "Salaries, rent, bills and subscriptions — reviewed before every deduction.",
+    ar: "الرواتب والإيجار والفواتير والاشتراكات — تُراجع قبل كل خصم.",
+  },
+  "rec.addIncome": { en: "Add recurring income", ar: "إضافة دخل متكرر" },
+  "rec.addExpense": { en: "Add recurring expense", ar: "إضافة مصروف متكرر" },
+  "rec.incomeList": { en: "Recurring income", ar: "الدخل المتكرر" },
+  "rec.expenseList": { en: "Recurring expenses", ar: "المصروفات المتكررة" },
+  "rec.due": { en: "Due now", ar: "مستحقة الآن" },
+  "rec.dueSub": {
+    en: "Review these before they are deducted.",
+    ar: "راجع هذه العمليات قبل خصمها.",
+  },
+  "rec.dueTitle": { en: "Due expense", ar: "مصروف مستحق" },
+  "rec.dueIncomeTitle": { en: "Due income", ar: "دخل مستحق" },
+  "rec.name": { en: "Name", ar: "الاسم" },
+  "rec.namePhIncome": { en: "e.g. Monthly salary", ar: "مثال: الراتب الشهري" },
+  "rec.namePhExpense": { en: "e.g. Rent", ar: "مثال: الإيجار" },
+  "rec.firstDue": { en: "First due date", ar: "تاريخ أول استحقاق" },
+  "rec.dueDate": { en: "Due date", ar: "تاريخ الاستحقاق" },
+  "rec.recurrence": { en: "Recurrence", ar: "تكرار العملية" },
+  "rec.notes": { en: "Notes", ar: "ملاحظات" },
+  "rec.weekly": { en: "Weekly", ar: "أسبوعي" },
+  "rec.biweekly": { en: "Every 2 weeks", ar: "كل أسبوعين" },
+  "rec.monthly": { en: "Monthly", ar: "شهري" },
+  "rec.quarterly": { en: "Every 3 months", ar: "كل ثلاثة أشهر" },
+  "rec.yearly": { en: "Yearly", ar: "سنوي" },
+  "rec.preview": { en: "Preview", ar: "معاينة" },
+  "rec.previewTitle": { en: "Preview", ar: "معاينة العملية" },
+  "rec.saveIncome": { en: "Save income", ar: "حفظ الدخل" },
+  "rec.saveExpense": { en: "Save expense", ar: "حفظ المصروف" },
+  "rec.savedIncome": { en: "Recurring income added", ar: "تمت إضافة الدخل المتكرر" },
+  "rec.savedExpense": { en: "Recurring expense added", ar: "تمت إضافة المصروف المتكرر" },
+  "rec.confirm": { en: "Confirm deduction", ar: "تأكيد الخصم" },
+  "rec.confirmIncome": { en: "Confirm deposit", ar: "تأكيد الإيداع" },
+  "rec.confirmBody": {
+    en: "The transaction will be created and the account balance updated.",
+    ar: "سيتم إنشاء العملية وتحديث رصيد الحساب.",
+  },
+  "rec.confirmed": { en: "Transaction created", ar: "تم إنشاء العملية" },
+  "rec.postpone": { en: "Postpone", ar: "تأجيل" },
+  "rec.postponeTitle": { en: "Postpone to", ar: "التأجيل إلى" },
+  "rec.postponed": { en: "Postponed successfully", ar: "تم التأجيل بنجاح" },
+  "rec.week": { en: "One week", ar: "أسبوع" },
+  "rec.month": { en: "One month", ar: "شهر" },
+  "rec.custom": { en: "Custom date", ar: "تاريخ مخصص" },
+  "rec.editTitle": { en: "Edit recurring operation", ar: "تعديل العملية المتكررة" },
+  "rec.updated": { en: "Recurring operation updated", ar: "تم تحديث العملية المتكررة" },
+  "rec.removed": { en: "Recurring operation deleted", ar: "تم حذف العملية المتكررة" },
+  "rec.previousAmount": { en: "Previous amount", ar: "المبلغ السابق" },
+  "rec.next": { en: "Next", ar: "الاستحقاق القادم" },
+  "rec.emptyIncome": { en: "No recurring income yet", ar: "لا يوجد دخل متكرر بعد" },
+  "rec.emptyExpense": { en: "No recurring expenses yet", ar: "لا توجد مصروفات متكررة بعد" },
+  "rec.emptyDue": { en: "Nothing due right now", ar: "لا يوجد استحقاق حاليًا" },
+  "rec.notFound": { en: "Operation not found", ar: "العملية غير موجودة" },
+  "rec.overdue": { en: "Overdue", ar: "متأخرة" },
+  "rec.inDays": { en: "in {n} days", ar: "خلال {n} يوم" },
+
+  "err.account": { en: "Please select an account.", ar: "يرجى اختيار الحساب." },
+  "err.amount": {
+    en: "Please enter an amount greater than zero.",
+    ar: "يرجى إدخال مبلغ أكبر من صفر.",
+  },
+  "err.date": { en: "Please enter a valid date.", ar: "يرجى إدخال تاريخ صحيح." },
+  "err.name": { en: "Please enter a name.", ar: "يرجى إدخال الاسم." },
+  "err.read": { en: "Could not read data from the file.", ar: "تعذر قراءة البيانات من الملف." },
+  "err.duplicate": { en: "A similar transaction was found.", ar: "تم العثور على عملية مشابهة." },
+
+  "cap.receipt": { en: "Scan receipt", ar: "تصوير فاتورة" },
+  "cap.receiptSub": {
+    en: "Photograph or upload a receipt and we extract the details for your review.",
+    ar: "صوّر أو ارفع فاتورة وسنستخرج التفاصيل لمراجعتها.",
+  },
+  "cap.transfer": { en: "Upload transfer screenshot", ar: "رفع لقطة تحويل" },
+  "cap.transferSub": {
+    en: "Upload a bank or wallet transfer screenshot to extract its details.",
+    ar: "ارفع لقطة تحويل بنكي أو محفظة رقمية لاستخراج تفاصيلها.",
+  },
+  "cap.camera": { en: "Open camera", ar: "فتح الكاميرا" },
+  "cap.upload": { en: "Upload image", ar: "رفع صورة" },
+  "cap.retake": { en: "Retake", ar: "إعادة التصوير" },
+  "cap.reupload": { en: "Re-upload", ar: "إعادة الرفع" },
+  "cap.remove": { en: "Remove image", ar: "حذف الصورة" },
+  "cap.processing": { en: "Reading the image…", ar: "جارٍ قراءة الصورة…" },
+  "cap.review": { en: "Review extracted data", ar: "مراجعة البيانات المستخرجة" },
+  "cap.reviewHint": {
+    en: "Nothing is saved until you confirm. Edit any field first.",
+    ar: "لن يتم الحفظ قبل تأكيدك. يمكنك تعديل أي حقل.",
+  },
+  "cap.merchant": { en: "Merchant", ar: "اسم المتجر" },
+  "cap.total": { en: "Total amount", ar: "المبلغ الإجمالي" },
+  "cap.tax": { en: "Tax", ar: "الضريبة" },
+  "cap.items": { en: "Items", ar: "تفاصيل الأصناف" },
+  "cap.sender": { en: "Sender", ar: "المرسل" },
+  "cap.receiver": { en: "Receiver", ar: "المستلم" },
+  "cap.reference": { en: "Reference number", ar: "الرقم المرجعي" },
+  "cap.saveTx": { en: "Save operation", ar: "حفظ العملية" },
+  "cap.confirmSave": { en: "Confirm & save", ar: "تأكيد وحفظ" },
+  "cap.failed": { en: "Could not read the image", ar: "تعذر قراءة الصورة" },
+  "cap.failedHint": {
+    en: "Try another photo, or enter the details manually.",
+    ar: "جرّب صورة أخرى، أو أدخل البيانات يدويًا.",
+  },
+  "cap.retry": { en: "Try again", ar: "إعادة المحاولة" },
+  "cap.manual": { en: "Enter manually", ar: "إدخال يدوي" },
+  "cap.saved": { en: "Operation saved", ar: "تم حفظ العملية" },
+  "cap.empty": { en: "No image selected yet", ar: "لم يتم اختيار صورة بعد" },
+
+  "imp.title": { en: "Import bank statement", ar: "استيراد كشف حساب" },
+  "imp.sub": {
+    en: "PDF, Excel or CSV — extracted, reviewed and matched before import.",
+    ar: "PDF أو Excel أو CSV — تُستخرج وتُراجع وتُطابق قبل الاستيراد.",
+  },
+  "imp.step1": { en: "Upload file", ar: "رفع الملف" },
+  "imp.step2": { en: "Extract data", ar: "استخراج البيانات" },
+  "imp.step3": { en: "Review data", ar: "مراجعة البيانات" },
+  "imp.step4": { en: "Match operations", ar: "مطابقة العمليات" },
+  "imp.step5": { en: "Confirm import", ar: "تأكيد الاستيراد" },
+  "imp.drop": { en: "Drag & drop your file here", ar: "اسحب الملف وأفلته هنا" },
+  "imp.browse": { en: "Browse files", ar: "استعراض الملفات" },
+  "imp.formats": { en: "Supported: PDF, XLSX, CSV", ar: "الصيغ المدعومة: PDF، XLSX، CSV" },
+  "imp.fileName": { en: "File name", ar: "اسم الملف" },
+  "imp.fileType": { en: "File type", ar: "نوع الملف" },
+  "imp.fileSize": { en: "File size", ar: "حجم الملف" },
+  "imp.status": { en: "Status", ar: "الحالة" },
+  "imp.extracting": { en: "Extracting transactions…", ar: "جارٍ استخراج العمليات…" },
+  "imp.extracted": { en: "Extracted operations", ar: "العمليات المستخرجة" },
+  "imp.description": { en: "Description", ar: "الوصف" },
+  "imp.detected": { en: "Detected account", ar: "الحساب المكتشف" },
+  "imp.selected": { en: "selected", ar: "محددة" },
+  "imp.importSelected": { en: "Import selected", ar: "استيراد المحدد" },
+  "imp.next": { en: "Continue", ar: "متابعة" },
+  "imp.back": { en: "Back", ar: "رجوع" },
+  "imp.match": { en: "Match operations", ar: "مطابقة العمليات" },
+  "imp.matchSub": {
+    en: "We compared each extracted operation with your existing ledger.",
+    ar: "قارنّا كل عملية مستخرجة مع سجلك الحالي.",
+  },
+  "imp.newOnes": { en: "New operations", ar: "العمليات الجديدة" },
+  "imp.dupes": { en: "Duplicate operations", ar: "العمليات المكررة" },
+  "imp.needsReview": { en: "Need review", ar: "تحتاج مراجعة" },
+  "imp.countExtracted": { en: "Extracted operations", ar: "عدد العمليات المستخرجة" },
+  "imp.s.new": { en: "New operation", ar: "عملية جديدة" },
+  "imp.s.duplicate": { en: "Possible duplicate", ar: "مكرر محتمل" },
+  "imp.s.review": { en: "Needs review", ar: "تحتاج مراجعة" },
+  "imp.s.matched": { en: "Matched", ar: "مطابق" },
+  "imp.markDuplicate": { en: "Mark as duplicate", ar: "اعتبارها مكررة" },
+  "imp.importAsNew": { en: "Import as new", ar: "استيراد كعملية جديدة" },
+  "imp.reviewIt": { en: "Review", ar: "مراجعة" },
+  "imp.ignore": { en: "Ignore", ar: "تجاهل" },
+  "imp.importedTx": { en: "Imported operation", ar: "العملية المستوردة" },
+  "imp.existingTx": { en: "Existing operation", ar: "العملية الحالية" },
+  "imp.confirmImport": { en: "Confirm import", ar: "تأكيد الاستيراد" },
+  "imp.done": { en: "Import completed", ar: "تم الاستيراد بنجاح" },
+  "imp.doneSub": {
+    en: "The selected operations were added to your ledger.",
+    ar: "تمت إضافة العمليات المحددة إلى سجلك.",
+  },
+  "imp.noneSelected": { en: "Select at least one operation.", ar: "اختر عملية واحدة على الأقل." },
+  "imp.startOver": { en: "Import another file", ar: "استيراد ملف آخر" },
+  "imp.badFile": {
+    en: "Unsupported file format.",
+    ar: "صيغة الملف غير مدعومة.",
+  },
+  "imp.recent": { en: "Recently imported", ar: "المستوردة حديثًا" },
+
+  "ops.more": { en: "More ways to add", ar: "طرق إضافة أخرى" },
+  "ops.moreSub": {
+    en: "Recurring operations, receipts, transfers and statement imports.",
+    ar: "عمليات متكررة وفواتير وتحويلات واستيراد كشوف الحساب.",
+  },
+
   "acc.title": { en: "Accounts", ar: "الحسابات" },
+
   "acc.sub": {
     en: "Cash, bank accounts, wallets and cards in one place.",
     ar: "النقد والحسابات البنكية والمحافظ والبطاقات في مكان واحد.",
@@ -298,8 +480,15 @@ const I18nContext = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
+  const href = useRouterState({ select: (s) => s.location.href });
 
   useEffect(() => {
+    const fromUrl = new URL(window.location.href).searchParams.get("lang");
+    if (fromUrl === "ar" || fromUrl === "en") {
+      setLangState(fromUrl);
+      window.localStorage.setItem("ss-lang", fromUrl);
+      return;
+    }
     const stored = window.localStorage.getItem("ss-lang") as Lang | null;
     if (stored === "ar" || stored === "en") setLangState(stored);
   }, []);
@@ -309,10 +498,23 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   }, [lang]);
 
+  // Keep ?lang=… in the URL in sync with the active language, across navigations.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("lang") !== lang) {
+      url.searchParams.set("lang", lang);
+      window.history.replaceState(window.history.state, "", url.toString());
+    }
+  }, [lang, href]);
+
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
     window.localStorage.setItem("ss-lang", l);
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", l);
+    window.history.replaceState(window.history.state, "", url.toString());
   }, []);
+
 
   const value = useMemo<Ctx>(() => {
     const locale = lang === "ar" ? "ar-EG" : "en-US";

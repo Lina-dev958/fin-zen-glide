@@ -31,8 +31,54 @@ export type Transaction = {
   categoryAr: string;
   accountId: string;
   date: string;
-  note?: string;
+  note?: string | undefined;
+
 };
+
+export type Recurrence = "weekly" | "biweekly" | "monthly" | "quarterly" | "yearly";
+
+export type Recurring = {
+  id: string;
+  kind: "income" | "expense";
+  name: string;
+  nameAr: string;
+  accountId: string;
+  category: string;
+  categoryAr: string;
+  amount: number;
+  currency: string;
+  nextDate: string;
+  recurrence: Recurrence;
+  note?: string | undefined;
+  lastAmount?: number | undefined;
+  active: boolean;
+};
+
+export type ImportStatus = "new" | "duplicate" | "review" | "matched";
+
+export type ImportedTx = {
+  id: string;
+  date: string;
+  description: string;
+  amount: number;
+  type: TxType;
+  currency: string;
+  accountId: string;
+  reference?: string | undefined;
+  status: ImportStatus;
+  matchId?: string | undefined;
+  selected: boolean;
+};
+
+export function addPeriod(date: string, r: Recurrence) {
+  const d = new Date(date);
+  if (r === "weekly") d.setDate(d.getDate() + 7);
+  else if (r === "biweekly") d.setDate(d.getDate() + 14);
+  else if (r === "monthly") d.setMonth(d.getMonth() + 1);
+  else if (r === "quarterly") d.setMonth(d.getMonth() + 3);
+  else d.setFullYear(d.getFullYear() + 1);
+  return d.toISOString().slice(0, 10);
+}
 
 export type Budget = {
   id: string;
@@ -409,8 +455,82 @@ const seedNotifications: Notification[] = [
   },
 ];
 
+const today = new Date();
+const shift = (days: number) => {
+  const d = new Date(today);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+};
+
+const seedRecurring: Recurring[] = [
+  {
+    id: "r1",
+    kind: "income",
+    name: "Monthly salary",
+    nameAr: "الراتب الشهري",
+    accountId: "a1",
+    category: "Salary",
+    categoryAr: "راتب",
+    amount: 5200,
+    currency: "USD",
+    nextDate: shift(6),
+    recurrence: "monthly",
+    active: true,
+  },
+  {
+    id: "r2",
+    kind: "expense",
+    name: "Rent",
+    nameAr: "الإيجار",
+    accountId: "a1",
+    category: "Housing",
+    categoryAr: "سكن وإيجار",
+    amount: 1850,
+    currency: "USD",
+    nextDate: shift(2),
+    recurrence: "monthly",
+    lastAmount: 1800,
+    active: true,
+  },
+  {
+    id: "r3",
+    kind: "expense",
+    name: "Internet",
+    nameAr: "الإنترنت",
+    accountId: "a1",
+    category: "Utilities",
+    categoryAr: "فواتير",
+    amount: 45,
+    currency: "USD",
+    nextDate: shift(-1),
+    recurrence: "monthly",
+    lastAmount: 45,
+    active: true,
+  },
+  {
+    id: "r4",
+    kind: "expense",
+    name: "Subscriptions",
+    nameAr: "الاشتراكات",
+    accountId: "a4",
+    category: "Software",
+    categoryAr: "برمجيات",
+    amount: 68,
+    currency: "USD",
+    nextDate: shift(9),
+    recurrence: "monthly",
+    active: true,
+  },
+];
+
 const wait = (ms = 650) => new Promise((r) => setTimeout(r, ms));
 const uid = () => Math.random().toString(36).slice(2, 9);
+
+function applyBalance(list: Account[], tx: Transaction, sign: 1 | -1) {
+  const delta = (tx.type === "income" ? tx.amount : -tx.amount) * sign;
+  return list.map((a) => (a.id === tx.accountId ? { ...a, balance: a.balance + delta } : a));
+}
+
 
 type Store = {
   accounts: Account[];
@@ -418,6 +538,17 @@ type Store = {
   budgets: Budget[];
   goals: Goal[];
   notifications: Notification[];
+  recurring: Recurring[];
+  imported: ImportedTx[];
+  lastImportIds: string[];
+  addRecurring: (r: Omit<Recurring, "id">) => Promise<void>;
+  updateRecurring: (r: Recurring) => Promise<void>;
+  removeRecurring: (id: string) => Promise<void>;
+  confirmRecurring: (id: string) => Promise<void>;
+  postponeRecurring: (id: string, date: string) => Promise<void>;
+  setImported: (list: ImportedTx[]) => void;
+  commitImport: (list: ImportedTx[]) => Promise<number>;
+
   addAccount: (a: Omit<Account, "id">) => Promise<void>;
   updateAccount: (a: Account) => Promise<void>;
   removeAccount: (id: string) => Promise<void>;
@@ -442,6 +573,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [budgets, setBudgets] = useState(seedBudgets);
   const [goals, setGoals] = useState(seedGoals);
   const [notifications, setNotifications] = useState(seedNotifications);
+  const [recurring, setRecurring] = useState(seedRecurring);
+  const [imported, setImportedState] = useState<ImportedTx[]>([]);
+  const [lastImportIds, setLastImportIds] = useState<string[]>([]);
 
   const value = useMemo<Store>(
     () => ({
@@ -450,6 +584,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       budgets,
       goals,
       notifications,
+      recurring,
+      imported,
+      lastImportIds,
       addAccount: async (a) => {
         await wait();
         setAccounts((p) => [{ ...a, id: uid() }, ...p]);
@@ -464,16 +601,90 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       },
       addTransaction: async (t) => {
         await wait();
-        setTransactions((p) => [{ ...t, id: uid() }, ...p]);
+        const full = { ...t, id: uid() };
+        setTransactions((p) => [full, ...p]);
+        setAccounts((p) => applyBalance(p, full, 1));
       },
       updateTransaction: async (t) => {
         await wait();
-        setTransactions((p) => p.map((x) => (x.id === t.id ? t : x)));
+        setTransactions((p) => {
+          const old = p.find((x) => x.id === t.id);
+          if (old) setAccounts((acc) => applyBalance(applyBalance(acc, old, -1), t, 1));
+          return p.map((x) => (x.id === t.id ? t : x));
+        });
       },
       removeTransaction: async (id) => {
         await wait(400);
-        setTransactions((p) => p.filter((x) => x.id !== id));
+        setTransactions((p) => {
+          const old = p.find((x) => x.id === id);
+          if (old) setAccounts((acc) => applyBalance(acc, old, -1));
+          return p.filter((x) => x.id !== id);
+        });
       },
+      addRecurring: async (r) => {
+        await wait();
+        setRecurring((p) => [{ ...r, id: uid() }, ...p]);
+      },
+      updateRecurring: async (r) => {
+        await wait();
+        setRecurring((p) => p.map((x) => (x.id === r.id ? r : x)));
+      },
+      removeRecurring: async (id) => {
+        await wait(400);
+        setRecurring((p) => p.filter((x) => x.id !== id));
+      },
+      confirmRecurring: async (id) => {
+        await wait();
+        const item = recurring.find((r) => r.id === id);
+        if (!item) return;
+        const tx: Transaction = {
+          id: uid(),
+          title: item.name,
+          titleAr: item.nameAr,
+          type: item.kind,
+          amount: item.amount,
+          category: item.category,
+          categoryAr: item.categoryAr,
+          accountId: item.accountId,
+          date: item.nextDate,
+          note: item.note,
+        };
+        setTransactions((p) => [tx, ...p]);
+        setAccounts((p) => applyBalance(p, tx, 1));
+        setRecurring((p) =>
+          p.map((r) =>
+            r.id === id
+              ? { ...r, lastAmount: r.amount, nextDate: addPeriod(r.nextDate, r.recurrence) }
+              : r,
+          ),
+        );
+      },
+      postponeRecurring: async (id, date) => {
+        await wait(400);
+        setRecurring((p) => p.map((r) => (r.id === id ? { ...r, nextDate: date } : r)));
+      },
+      setImported: (list) => setImportedState(list),
+      commitImport: async (list) => {
+        await wait(800);
+        const txs: Transaction[] = list.map((i) => ({
+          id: uid(),
+          title: i.description,
+          titleAr: i.description,
+          type: i.type,
+          amount: i.amount,
+          category: "Imported",
+          categoryAr: "مستورد",
+          accountId: i.accountId,
+          date: i.date,
+          note: i.reference,
+        }));
+        setTransactions((p) => [...txs, ...p]);
+        setAccounts((p) => txs.reduce((acc, t) => applyBalance(acc, t, 1), p));
+        setLastImportIds(txs.map((t) => t.id));
+        setImportedState([]);
+        return txs.length;
+      },
+
       addBudget: async (b) => {
         await wait();
         setBudgets((p) => [...p, { ...b, id: uid() }]);
@@ -501,7 +712,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       toggleRead: (id) =>
         setNotifications((p) => p.map((n) => (n.id === id ? { ...n, read: !n.read } : n))),
     }),
-    [accounts, transactions, budgets, goals, notifications],
+    [accounts, transactions, budgets, goals, notifications, recurring, imported, lastImportIds],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
