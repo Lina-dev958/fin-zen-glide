@@ -4,6 +4,8 @@ import { Camera, Loader2, Mic, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppLayout } from "@/components/app-layout";
+import { CaptureDialog, type CaptureMode } from "@/components/capture-dialog";
+
 import { EmptyState, SectionCard } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
