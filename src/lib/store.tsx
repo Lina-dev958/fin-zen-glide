@@ -31,7 +31,8 @@ export type Transaction = {
   categoryAr: string;
   accountId: string;
   date: string;
-  note?: string;
+  note?: string | undefined;
+
 };
 
 export type Recurrence = "weekly" | "biweekly" | "monthly" | "quarterly" | "yearly";
