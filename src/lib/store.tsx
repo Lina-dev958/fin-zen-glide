@@ -712,7 +712,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       toggleRead: (id) =>
         setNotifications((p) => p.map((n) => (n.id === id ? { ...n, read: !n.read } : n))),
     }),
-    [accounts, transactions, budgets, goals, notifications],
+    [accounts, transactions, budgets, goals, notifications, recurring, imported, lastImportIds],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
