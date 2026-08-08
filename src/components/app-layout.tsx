@@ -5,6 +5,9 @@ import {
   Building2,
   ChartPie,
   CreditCard,
+  FileUp,
+  Repeat,
+
   Globe,
   LayoutDashboard,
   LogOut,
