@@ -40,6 +40,8 @@ export const dict: Dict = {
   "common.edit": { en: "Edit", ar: "تعديل" },
   "common.delete": { en: "Delete", ar: "حذف" },
   "common.cancel": { en: "Cancel", ar: "إلغاء" },
+  "common.confirm": { en: "Confirm", ar: "تأكيد" },
+
   "common.save": { en: "Save", ar: "حفظ" },
   "common.saving": { en: "Saving…", ar: "جارٍ الحفظ…" },
   "common.details": { en: "Details", ar: "التفاصيل" },
