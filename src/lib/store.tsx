@@ -34,6 +34,51 @@ export type Transaction = {
   note?: string;
 };
 
+export type Recurrence = "weekly" | "biweekly" | "monthly" | "quarterly" | "yearly";
+
+export type Recurring = {
+  id: string;
+  kind: "income" | "expense";
+  name: string;
+  nameAr: string;
+  accountId: string;
+  category: string;
+  categoryAr: string;
+  amount: number;
+  currency: string;
+  nextDate: string;
+  recurrence: Recurrence;
+  note?: string;
+  lastAmount?: number;
+  active: boolean;
+};
+
+export type ImportStatus = "new" | "duplicate" | "review" | "matched";
+
+export type ImportedTx = {
+  id: string;
+  date: string;
+  description: string;
+  amount: number;
+  type: TxType;
+  currency: string;
+  accountId: string;
+  reference?: string;
+  status: ImportStatus;
+  matchId?: string;
+  selected: boolean;
+};
+
+export function addPeriod(date: string, r: Recurrence) {
+  const d = new Date(date);
+  if (r === "weekly") d.setDate(d.getDate() + 7);
+  else if (r === "biweekly") d.setDate(d.getDate() + 14);
+  else if (r === "monthly") d.setMonth(d.getMonth() + 1);
+  else if (r === "quarterly") d.setMonth(d.getMonth() + 3);
+  else d.setFullYear(d.getFullYear() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
 export type Budget = {
   id: string;
   category: string;
