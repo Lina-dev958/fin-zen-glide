@@ -121,10 +121,23 @@ function RecurringForm({
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim()) return toast.error(t("err.name"));
-    if (!validAmount) return toast.error(t("err.amount"));
-    if (!form.accountId) return toast.error(t("err.account"));
-    if (!form.nextDate) return toast.error(t("err.date"));
+    if (!form.name.trim()) {
+      toast.error(t("err.name"));
+      return;
+    }
+    if (!validAmount) {
+      toast.error(t("err.amount"));
+      return;
+    }
+    if (!form.accountId) {
+      toast.error(t("err.account"));
+      return;
+    }
+    if (!form.nextDate) {
+      toast.error(t("err.date"));
+      return;
+    }
+
 
     const cat = CATEGORIES.find((c) => c.key === form.category);
     setSaving(true);

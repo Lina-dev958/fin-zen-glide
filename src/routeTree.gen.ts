@@ -15,6 +15,7 @@ import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as BudgetsRouteImport } from './routes/budgets'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as RecurringRouteImport } from './routes/recurring'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TransactionsRouteImport } from './routes/transactions'
@@ -49,6 +50,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecurringRoute = RecurringRouteImport.update({
+  id: '/recurring',
+  path: '/recurring',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReportsRoute = ReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/budgets': typeof BudgetsRoute
   '/goals': typeof GoalsRoute
   '/notifications': typeof NotificationsRoute
+  '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/transactions': typeof TransactionsRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/budgets': typeof BudgetsRoute
   '/goals': typeof GoalsRoute
   '/notifications': typeof NotificationsRoute
+  '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/transactions': typeof TransactionsRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/budgets': typeof BudgetsRoute
   '/goals': typeof GoalsRoute
   '/notifications': typeof NotificationsRoute
+  '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/transactions': typeof TransactionsRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/budgets'
     | '/goals'
     | '/notifications'
+    | '/recurring'
     | '/reports'
     | '/settings'
     | '/transactions'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/budgets'
     | '/goals'
     | '/notifications'
+    | '/recurring'
     | '/reports'
     | '/settings'
     | '/transactions'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/budgets'
     | '/goals'
     | '/notifications'
+    | '/recurring'
     | '/reports'
     | '/settings'
     | '/transactions'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   BudgetsRoute: typeof BudgetsRoute
   GoalsRoute: typeof GoalsRoute
   NotificationsRoute: typeof NotificationsRoute
+  RecurringRoute: typeof RecurringRoute
   ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
   TransactionsRoute: typeof TransactionsRoute
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recurring': {
+      id: '/recurring'
+      path: '/recurring'
+      fullPath: '/recurring'
+      preLoaderRoute: typeof RecurringRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reports': {
       id: '/reports'
       path: '/reports'
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   BudgetsRoute: BudgetsRoute,
   GoalsRoute: GoalsRoute,
   NotificationsRoute: NotificationsRoute,
+  RecurringRoute: RecurringRoute,
   ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,
   TransactionsRoute: TransactionsRoute,
@@ -229,13 +250,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
