@@ -49,8 +49,8 @@ export type Recurring = {
   currency: string;
   nextDate: string;
   recurrence: Recurrence;
-  note?: string;
-  lastAmount?: number;
+  note?: string | undefined;
+  lastAmount?: number | undefined;
   active: boolean;
 };
 
@@ -64,9 +64,9 @@ export type ImportedTx = {
   type: TxType;
   currency: string;
   accountId: string;
-  reference?: string;
+  reference?: string | undefined;
   status: ImportStatus;
-  matchId?: string;
+  matchId?: string | undefined;
   selected: boolean;
 };
 
