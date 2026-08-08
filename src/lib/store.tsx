@@ -572,6 +572,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [budgets, setBudgets] = useState(seedBudgets);
   const [goals, setGoals] = useState(seedGoals);
   const [notifications, setNotifications] = useState(seedNotifications);
+  const [recurring, setRecurring] = useState(seedRecurring);
+  const [imported, setImportedState] = useState<ImportedTx[]>([]);
+  const [lastImportIds, setLastImportIds] = useState<string[]>([]);
 
   const value = useMemo<Store>(
     () => ({
@@ -580,6 +583,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       budgets,
       goals,
       notifications,
+      recurring,
+      imported,
+      lastImportIds,
       addAccount: async (a) => {
         await wait();
         setAccounts((p) => [{ ...a, id: uid() }, ...p]);
@@ -594,16 +600,90 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       },
       addTransaction: async (t) => {
         await wait();
-        setTransactions((p) => [{ ...t, id: uid() }, ...p]);
+        const full = { ...t, id: uid() };
+        setTransactions((p) => [full, ...p]);
+        setAccounts((p) => applyBalance(p, full, 1));
       },
       updateTransaction: async (t) => {
         await wait();
-        setTransactions((p) => p.map((x) => (x.id === t.id ? t : x)));
+        setTransactions((p) => {
+          const old = p.find((x) => x.id === t.id);
+          if (old) setAccounts((acc) => applyBalance(applyBalance(acc, old, -1), t, 1));
+          return p.map((x) => (x.id === t.id ? t : x));
+        });
       },
       removeTransaction: async (id) => {
         await wait(400);
-        setTransactions((p) => p.filter((x) => x.id !== id));
+        setTransactions((p) => {
+          const old = p.find((x) => x.id === id);
+          if (old) setAccounts((acc) => applyBalance(acc, old, -1));
+          return p.filter((x) => x.id !== id);
+        });
       },
+      addRecurring: async (r) => {
+        await wait();
+        setRecurring((p) => [{ ...r, id: uid() }, ...p]);
+      },
+      updateRecurring: async (r) => {
+        await wait();
+        setRecurring((p) => p.map((x) => (x.id === r.id ? r : x)));
+      },
+      removeRecurring: async (id) => {
+        await wait(400);
+        setRecurring((p) => p.filter((x) => x.id !== id));
+      },
+      confirmRecurring: async (id) => {
+        await wait();
+        const item = recurring.find((r) => r.id === id);
+        if (!item) return;
+        const tx: Transaction = {
+          id: uid(),
+          title: item.name,
+          titleAr: item.nameAr,
+          type: item.kind,
+          amount: item.amount,
+          category: item.category,
+          categoryAr: item.categoryAr,
+          accountId: item.accountId,
+          date: item.nextDate,
+          note: item.note,
+        };
+        setTransactions((p) => [tx, ...p]);
+        setAccounts((p) => applyBalance(p, tx, 1));
+        setRecurring((p) =>
+          p.map((r) =>
+            r.id === id
+              ? { ...r, lastAmount: r.amount, nextDate: addPeriod(r.nextDate, r.recurrence) }
+              : r,
+          ),
+        );
+      },
+      postponeRecurring: async (id, date) => {
+        await wait(400);
+        setRecurring((p) => p.map((r) => (r.id === id ? { ...r, nextDate: date } : r)));
+      },
+      setImported: (list) => setImportedState(list),
+      commitImport: async (list) => {
+        await wait(800);
+        const txs: Transaction[] = list.map((i) => ({
+          id: uid(),
+          title: i.description,
+          titleAr: i.description,
+          type: i.type,
+          amount: i.amount,
+          category: "Imported",
+          categoryAr: "مستورد",
+          accountId: i.accountId,
+          date: i.date,
+          note: i.reference,
+        }));
+        setTransactions((p) => [...txs, ...p]);
+        setAccounts((p) => txs.reduce((acc, t) => applyBalance(acc, t, 1), p));
+        setLastImportIds(txs.map((t) => t.id));
+        setImportedState([]);
+        return txs.length;
+      },
+
       addBudget: async (b) => {
         await wait();
         setBudgets((p) => [...p, { ...b, id: uid() }]);
