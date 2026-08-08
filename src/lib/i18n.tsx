@@ -298,8 +298,15 @@ const I18nContext = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
+  const href = useRouterState({ select: (s) => s.location.href });
 
   useEffect(() => {
+    const fromUrl = new URL(window.location.href).searchParams.get("lang");
+    if (fromUrl === "ar" || fromUrl === "en") {
+      setLangState(fromUrl);
+      window.localStorage.setItem("ss-lang", fromUrl);
+      return;
+    }
     const stored = window.localStorage.getItem("ss-lang") as Lang | null;
     if (stored === "ar" || stored === "en") setLangState(stored);
   }, []);
@@ -309,10 +316,23 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   }, [lang]);
 
+  // Keep ?lang=… in the URL in sync with the active language, across navigations.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("lang") !== lang) {
+      url.searchParams.set("lang", lang);
+      window.history.replaceState(window.history.state, "", url.toString());
+    }
+  }, [lang, href]);
+
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
     window.localStorage.setItem("ss-lang", l);
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", l);
+    window.history.replaceState(window.history.state, "", url.toString());
   }, []);
+
 
   const value = useMemo<Ctx>(() => {
     const locale = lang === "ar" ? "ar-EG" : "en-US";
