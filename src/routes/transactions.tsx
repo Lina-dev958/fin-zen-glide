@@ -150,19 +150,20 @@ function OperationsPage() {
             </div>
             <p className="mt-2 text-sm text-muted-foreground">{t("ops.smartSub")}</p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <Button onClick={() => toast.info(t("ops.soon"))} className="rounded-xl">
-                <Mic className="size-4" />
-                {t("ops.voice")}
+              <Button onClick={() => setCapture("receipt")} className="rounded-xl">
+                <Camera className="size-4" />
+                {t("cap.receipt")}
               </Button>
               <Button
                 variant="outline"
-                onClick={() => toast.info(t("ops.soon"))}
+                onClick={() => setCapture("transfer")}
                 className="rounded-xl"
               >
-                <Camera className="size-4" />
-                {t("ops.photo")}
+                <Mic className="size-4" />
+                {t("cap.transfer")}
               </Button>
             </div>
+
           </section>
 
           <SectionCard title={t("ops.new")}>
