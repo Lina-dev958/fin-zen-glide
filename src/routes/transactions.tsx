@@ -78,6 +78,8 @@ function OperationsPage() {
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [capture, setCapture] = useState<CaptureMode | null>(null);
+
 
   const list = useMemo(
     () =>
