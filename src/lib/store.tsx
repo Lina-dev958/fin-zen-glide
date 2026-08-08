@@ -454,8 +454,82 @@ const seedNotifications: Notification[] = [
   },
 ];
 
+const today = new Date();
+const shift = (days: number) => {
+  const d = new Date(today);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+};
+
+const seedRecurring: Recurring[] = [
+  {
+    id: "r1",
+    kind: "income",
+    name: "Monthly salary",
+    nameAr: "الراتب الشهري",
+    accountId: "a1",
+    category: "Salary",
+    categoryAr: "راتب",
+    amount: 5200,
+    currency: "USD",
+    nextDate: shift(6),
+    recurrence: "monthly",
+    active: true,
+  },
+  {
+    id: "r2",
+    kind: "expense",
+    name: "Rent",
+    nameAr: "الإيجار",
+    accountId: "a1",
+    category: "Housing",
+    categoryAr: "سكن وإيجار",
+    amount: 1850,
+    currency: "USD",
+    nextDate: shift(2),
+    recurrence: "monthly",
+    lastAmount: 1800,
+    active: true,
+  },
+  {
+    id: "r3",
+    kind: "expense",
+    name: "Internet",
+    nameAr: "الإنترنت",
+    accountId: "a1",
+    category: "Utilities",
+    categoryAr: "فواتير",
+    amount: 45,
+    currency: "USD",
+    nextDate: shift(-1),
+    recurrence: "monthly",
+    lastAmount: 45,
+    active: true,
+  },
+  {
+    id: "r4",
+    kind: "expense",
+    name: "Subscriptions",
+    nameAr: "الاشتراكات",
+    accountId: "a4",
+    category: "Software",
+    categoryAr: "برمجيات",
+    amount: 68,
+    currency: "USD",
+    nextDate: shift(9),
+    recurrence: "monthly",
+    active: true,
+  },
+];
+
 const wait = (ms = 650) => new Promise((r) => setTimeout(r, ms));
 const uid = () => Math.random().toString(36).slice(2, 9);
+
+function applyBalance(list: Account[], tx: Transaction, sign: 1 | -1) {
+  const delta = (tx.type === "income" ? tx.amount : -tx.amount) * sign;
+  return list.map((a) => (a.id === tx.accountId ? { ...a, balance: a.balance + delta } : a));
+}
+
 
 type Store = {
   accounts: Account[];
