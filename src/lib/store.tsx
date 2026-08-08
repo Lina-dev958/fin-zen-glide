@@ -537,6 +537,17 @@ type Store = {
   budgets: Budget[];
   goals: Goal[];
   notifications: Notification[];
+  recurring: Recurring[];
+  imported: ImportedTx[];
+  lastImportIds: string[];
+  addRecurring: (r: Omit<Recurring, "id">) => Promise<void>;
+  updateRecurring: (r: Recurring) => Promise<void>;
+  removeRecurring: (id: string) => Promise<void>;
+  confirmRecurring: (id: string) => Promise<void>;
+  postponeRecurring: (id: string, date: string) => Promise<void>;
+  setImported: (list: ImportedTx[]) => void;
+  commitImport: (list: ImportedTx[]) => Promise<number>;
+
   addAccount: (a: Omit<Account, "id">) => Promise<void>;
   updateAccount: (a: Account) => Promise<void>;
   removeAccount: (id: string) => Promise<void>;
