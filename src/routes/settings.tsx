@@ -17,6 +17,8 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useI18n, type Lang } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
+
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
