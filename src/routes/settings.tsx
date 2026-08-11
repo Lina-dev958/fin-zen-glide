@@ -35,8 +35,8 @@ export const Route = createFileRoute("/settings")({
 
 function SettingsPage() {
   const { t, lang, setLang } = useI18n();
+  const { theme, setTheme } = useTheme();
   const [saving, setSaving] = useState(false);
-  const [dark, setDark] = useState(false);
   const [twoFa, setTwoFa] = useState(true);
 
   const save = async () => {
@@ -46,10 +46,8 @@ function SettingsPage() {
     toast.success(t("common.saved"));
   };
 
-  const toggleDark = (v: boolean) => {
-    setDark(v);
-    document.documentElement.classList.toggle("dark", v);
-  };
+  const toggleDark = (v: boolean) => setTheme(v ? "dark" : "light");
+
 
   return (
     <AppLayout>
