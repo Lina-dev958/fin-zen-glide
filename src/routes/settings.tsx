@@ -161,7 +161,7 @@ function SettingsPage() {
           <SectionCard title={t("set.appearance")}>
             <div className="flex items-center justify-between gap-4">
               <span className="text-sm">{t("set.dark")}</span>
-              <Switch checked={dark} onCheckedChange={toggleDark} />
+              <Switch checked={theme === "dark"} onCheckedChange={toggleDark} />
             </div>
           </SectionCard>
         </TabsContent>
