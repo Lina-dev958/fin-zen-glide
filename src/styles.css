@@ -102,6 +102,9 @@
   --success-foreground: #ffffff;
   --warning: #ea580c;
   --warning-foreground: #ffffff;
+  --repair: #9333ea;
+  --repair-foreground: #ffffff;
+
 
   --border: #e5e7eb;
   --input: #e5e7eb;
