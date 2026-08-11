@@ -17,6 +17,8 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useI18n, type Lang } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
+
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -35,8 +37,8 @@ export const Route = createFileRoute("/settings")({
 
 function SettingsPage() {
   const { t, lang, setLang } = useI18n();
+  const { theme, setTheme } = useTheme();
   const [saving, setSaving] = useState(false);
-  const [dark, setDark] = useState(false);
   const [twoFa, setTwoFa] = useState(true);
 
   const save = async () => {
@@ -46,10 +48,8 @@ function SettingsPage() {
     toast.success(t("common.saved"));
   };
 
-  const toggleDark = (v: boolean) => {
-    setDark(v);
-    document.documentElement.classList.toggle("dark", v);
-  };
+  const toggleDark = (v: boolean) => setTheme(v ? "dark" : "light");
+
 
   return (
     <AppLayout>
@@ -161,7 +161,7 @@ function SettingsPage() {
           <SectionCard title={t("set.appearance")}>
             <div className="flex items-center justify-between gap-4">
               <span className="text-sm">{t("set.dark")}</span>
-              <Switch checked={dark} onCheckedChange={toggleDark} />
+              <Switch checked={theme === "dark"} onCheckedChange={toggleDark} />
             </div>
           </SectionCard>
         </TabsContent>

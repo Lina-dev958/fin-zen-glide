@@ -12,10 +12,12 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  Moon,
   PiggyBank,
   Search,
   Settings,
   Sparkles,
+  Sun,
   Target,
   Wallet,
 } from "lucide-react";
@@ -25,7 +27,9 @@ import { toast } from "sonner";
 import logo from "@/assets/smartspend-logo.png.asset.json";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
+import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -163,6 +167,8 @@ function LogoutButton({ full = true }: { full?: boolean }) {
 
 function Topbar() {
   const { t, lang, toggleLang } = useI18n();
+  const { theme, toggleTheme } = useTheme();
+
   const { notifications, markAllRead } = useStore();
   const unread = notifications.filter((n) => !n.read).length;
   const [query, setQuery] = useState("");
@@ -207,6 +213,16 @@ function Topbar() {
         <div className="flex shrink-0 items-center gap-1">
           <Button
             variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            aria-label={t("set.dark")}
+            title={t("set.dark")}
+          >
+            {theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}
+          </Button>
+
+          <Button
+            variant="ghost"
             size="sm"
             onClick={toggleLang}
             className="gap-2 rounded-xl font-medium"
@@ -214,6 +230,7 @@ function Topbar() {
             <Globe className="size-4" />
             <span className="hidden sm:inline">{t("top.lang")}</span>
           </Button>
+
 
           <Popover>
             <PopoverTrigger asChild>
