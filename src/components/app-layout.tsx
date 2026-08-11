@@ -163,6 +163,8 @@ function LogoutButton({ full = true }: { full?: boolean }) {
 
 function Topbar() {
   const { t, lang, toggleLang } = useI18n();
+  const { theme, toggleTheme } = useTheme();
+
   const { notifications, markAllRead } = useStore();
   const unread = notifications.filter((n) => !n.read).length;
   const [query, setQuery] = useState("");
