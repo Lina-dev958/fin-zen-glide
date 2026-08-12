@@ -16,6 +16,7 @@ import { Route as BudgetsRouteImport } from './routes/budgets'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as ImportRouteImport } from './routes/import'
+import { Route as LandingRouteImport } from './routes/landing'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as RecurringRouteImport } from './routes/recurring'
@@ -60,6 +61,11 @@ const GoalsRoute = GoalsRouteImport.update({
 const ImportRoute = ImportRouteImport.update({
   id: '/import',
   path: '/import',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LandingRoute = LandingRouteImport.update({
+  id: '/landing',
+  path: '/landing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
+  '/landing': typeof LandingRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/recurring': typeof RecurringRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
+  '/landing': typeof LandingRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/recurring': typeof RecurringRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
+  '/landing': typeof LandingRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/recurring': typeof RecurringRoute
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/goals'
     | '/import'
+    | '/landing'
     | '/login'
     | '/notifications'
     | '/recurring'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/goals'
     | '/import'
+    | '/landing'
     | '/login'
     | '/notifications'
     | '/recurring'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/goals'
     | '/import'
+    | '/landing'
     | '/login'
     | '/notifications'
     | '/recurring'
@@ -239,6 +251,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GoalsRoute: typeof GoalsRoute
   ImportRoute: typeof ImportRoute
+  LandingRoute: typeof LandingRoute
   LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
   RecurringRoute: typeof RecurringRoute
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/import'
       fullPath: '/import'
       preLoaderRoute: typeof ImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/landing': {
+      id: '/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof LandingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -383,6 +403,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   GoalsRoute: GoalsRoute,
   ImportRoute: ImportRoute,
+  LandingRoute: LandingRoute,
   LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
   RecurringRoute: RecurringRoute,
