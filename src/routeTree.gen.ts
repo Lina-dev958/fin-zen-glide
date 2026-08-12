@@ -13,13 +13,20 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as BudgetsRouteImport } from './routes/budgets'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as ImportRouteImport } from './routes/import'
+import { Route as LandingRouteImport } from './routes/landing'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as RecurringRouteImport } from './routes/recurring'
 import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ResetSuccessRouteImport } from './routes/reset-success'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as TransactionsRouteImport } from './routes/transactions'
+import { Route as VerifyCodeRouteImport } from './routes/verify-code'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,6 +48,11 @@ const BudgetsRoute = BudgetsRouteImport.update({
   path: '/budgets',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GoalsRoute = GoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
@@ -49,6 +61,16 @@ const GoalsRoute = GoalsRouteImport.update({
 const ImportRoute = ImportRouteImport.update({
   id: '/import',
   path: '/import',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LandingRoute = LandingRouteImport.update({
+  id: '/landing',
+  path: '/landing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsRoute = NotificationsRouteImport.update({
@@ -66,14 +88,34 @@ const ReportsRoute = ReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetSuccessRoute = ResetSuccessRouteImport.update({
+  id: '/reset-success',
+  path: '/reset-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TransactionsRoute = TransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyCodeRoute = VerifyCodeRouteImport.update({
+  id: '/verify-code',
+  path: '/verify-code',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -82,26 +124,40 @@ export interface FileRoutesByFullPath {
   '/accounts': typeof AccountsRoute
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
+  '/landing': typeof LandingRoute
+  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/reset-success': typeof ResetSuccessRoute
   '/settings': typeof SettingsRoute
+  '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
+  '/verify-code': typeof VerifyCodeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
+  '/landing': typeof LandingRoute
+  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/reset-success': typeof ResetSuccessRoute
   '/settings': typeof SettingsRoute
+  '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
+  '/verify-code': typeof VerifyCodeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -109,13 +165,20 @@ export interface FileRoutesById {
   '/accounts': typeof AccountsRoute
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
+  '/landing': typeof LandingRoute
+  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/reset-success': typeof ResetSuccessRoute
   '/settings': typeof SettingsRoute
+  '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
+  '/verify-code': typeof VerifyCodeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -124,39 +187,60 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/assistant'
     | '/budgets'
+    | '/forgot-password'
     | '/goals'
     | '/import'
+    | '/landing'
+    | '/login'
     | '/notifications'
     | '/recurring'
     | '/reports'
+    | '/reset-password'
+    | '/reset-success'
     | '/settings'
+    | '/signup'
     | '/transactions'
+    | '/verify-code'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accounts'
     | '/assistant'
     | '/budgets'
+    | '/forgot-password'
     | '/goals'
     | '/import'
+    | '/landing'
+    | '/login'
     | '/notifications'
     | '/recurring'
     | '/reports'
+    | '/reset-password'
+    | '/reset-success'
     | '/settings'
+    | '/signup'
     | '/transactions'
+    | '/verify-code'
   id:
     | '__root__'
     | '/'
     | '/accounts'
     | '/assistant'
     | '/budgets'
+    | '/forgot-password'
     | '/goals'
     | '/import'
+    | '/landing'
+    | '/login'
     | '/notifications'
     | '/recurring'
     | '/reports'
+    | '/reset-password'
+    | '/reset-success'
     | '/settings'
+    | '/signup'
     | '/transactions'
+    | '/verify-code'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -164,13 +248,20 @@ export interface RootRouteChildren {
   AccountsRoute: typeof AccountsRoute
   AssistantRoute: typeof AssistantRoute
   BudgetsRoute: typeof BudgetsRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   GoalsRoute: typeof GoalsRoute
   ImportRoute: typeof ImportRoute
+  LandingRoute: typeof LandingRoute
+  LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
   RecurringRoute: typeof RecurringRoute
   ReportsRoute: typeof ReportsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  ResetSuccessRoute: typeof ResetSuccessRoute
   SettingsRoute: typeof SettingsRoute
+  SignupRoute: typeof SignupRoute
   TransactionsRoute: typeof TransactionsRoute
+  VerifyCodeRoute: typeof VerifyCodeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -203,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BudgetsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/goals': {
       id: '/goals'
       path: '/goals'
@@ -215,6 +313,20 @@ declare module '@tanstack/react-router' {
       path: '/import'
       fullPath: '/import'
       preLoaderRoute: typeof ImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/landing': {
+      id: '/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof LandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notifications': {
@@ -238,6 +350,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-success': {
+      id: '/reset-success'
+      path: '/reset-success'
+      fullPath: '/reset-success'
+      preLoaderRoute: typeof ResetSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -245,11 +371,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/transactions': {
       id: '/transactions'
       path: '/transactions'
       fullPath: '/transactions'
       preLoaderRoute: typeof TransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-code': {
+      id: '/verify-code'
+      path: '/verify-code'
+      fullPath: '/verify-code'
+      preLoaderRoute: typeof VerifyCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -260,13 +400,20 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsRoute: AccountsRoute,
   AssistantRoute: AssistantRoute,
   BudgetsRoute: BudgetsRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   GoalsRoute: GoalsRoute,
   ImportRoute: ImportRoute,
+  LandingRoute: LandingRoute,
+  LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
   RecurringRoute: RecurringRoute,
   ReportsRoute: ReportsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  ResetSuccessRoute: ResetSuccessRoute,
   SettingsRoute: SettingsRoute,
+  SignupRoute: SignupRoute,
   TransactionsRoute: TransactionsRoute,
+  VerifyCodeRoute: VerifyCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

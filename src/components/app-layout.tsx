@@ -24,7 +24,7 @@ import {
 import { useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
-import logo from "@/assets/smartspend-logo.png.asset.json";
+import logo from "@/assets/smartspend-mark.png.asset.json";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { useTheme } from "@/lib/theme";
