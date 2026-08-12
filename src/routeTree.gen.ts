@@ -20,6 +20,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as RecurringRouteImport } from './routes/recurring'
 import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as TransactionsRouteImport } from './routes/transactions'
@@ -80,6 +81,11 @@ const ReportsRoute = ReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsRoute
   '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsRoute
   '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/recurring': typeof RecurringRoute
   '/reports': typeof ReportsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/recurring'
     | '/reports'
+    | '/reset-password'
     | '/settings'
     | '/signup'
     | '/transactions'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/recurring'
     | '/reports'
+    | '/reset-password'
     | '/settings'
     | '/signup'
     | '/transactions'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/recurring'
     | '/reports'
+    | '/reset-password'
     | '/settings'
     | '/signup'
     | '/transactions'
@@ -219,6 +231,7 @@ export interface RootRouteChildren {
   NotificationsRoute: typeof NotificationsRoute
   RecurringRoute: typeof RecurringRoute
   ReportsRoute: typeof ReportsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   TransactionsRoute: typeof TransactionsRoute
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -347,6 +367,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsRoute: NotificationsRoute,
   RecurringRoute: RecurringRoute,
   ReportsRoute: ReportsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   TransactionsRoute: TransactionsRoute,
