@@ -26,14 +26,15 @@ function SignupPage() {
   const { t } = useI18n();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", id: "", pw: "", confirm: "", agree: false });
-  const [err, setErr] = useState<Record<string, string>>({});
+  type Errs = { name?: string; id?: string; pw?: string; confirm?: string; agree?: string };
+  const [err, setErr] = useState<Errs>({});
   const [busy, setBusy] = useState(false);
 
   const set = (k: string, v: string | boolean) => setForm((f) => ({ ...f, [k]: v }));
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    const next: Record<string, string> = {};
+    const next: Errs = {};
     if (!form.name.trim()) next.name = t("common.required");
     if (!form.id.trim()) next.id = t("common.required");
     if (form.pw.length < 8) next.pw = t("auth.rule1");
