@@ -31,7 +31,7 @@ function SuccessPage() {
         </span>
       </div>
       <AuthHeading title={t("auth.success.title")} sub={t("auth.success.sub")} />
-      <Button asChild className="w-full gradient-brand">
+      <Button asChild className="shine-sweep h-11 w-full rounded-xl gradient-brand shadow-[0_10px_30px_-12px_var(--primary)] transition-transform duration-300 hover:-translate-y-0.5 active:translate-y-0">
         <Link to="/login">{t("auth.backToLogin")}</Link>
       </Button>
     </AuthShell>
