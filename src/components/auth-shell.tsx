@@ -1,9 +1,21 @@
 import { Link } from "@tanstack/react-router";
-import { Globe, Moon, ShieldCheck, Sparkles, Sun } from "lucide-react";
-import type { ReactNode } from "react";
+import {
+  Apple,
+  Chrome,
+  Eye,
+  EyeOff,
+  Globe,
+  Lock,
+  Moon,
+  ShieldCheck,
+  Sparkles,
+  Sun,
+} from "lucide-react";
+import { useState, type ComponentType, type ReactNode } from "react";
 
 import mark from "@/assets/smartspend-mark.png.asset.json";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useI18n } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
@@ -117,13 +129,51 @@ export function AuthShell({
   );
 }
 
-export function AuthHeading({ title, sub }: { title: string; sub: string }) {
+export function AuthHeading({
+  title,
+  sub,
+  icon: Icon,
+}: {
+  title: string;
+  sub: string;
+  icon?: ComponentType<{ className?: string }>;
+}) {
   return (
-    <div className="space-y-2 text-center">
+    <div className="space-y-3 text-center">
+      {Icon ? (
+        <div className="relative mx-auto mb-1 grid size-16 place-items-center">
+          <span className="absolute inset-0 rounded-3xl bg-primary/15 animate-pulse-ring" />
+          <span className="relative grid size-14 place-items-center rounded-3xl gradient-brand text-primary-foreground shadow-[0_14px_30px_-10px_var(--primary)] animate-float">
+            <Icon className="size-7" />
+          </span>
+        </div>
+      ) : null}
       <h1 className="font-display text-3xl font-bold tracking-tight text-gradient-brand">
         {title}
       </h1>
       <p className="text-sm text-muted-foreground">{sub}</p>
+    </div>
+  );
+}
+
+export function PasswordInput(props: React.ComponentProps<typeof Input>) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative">
+      <Lock className="pointer-events-none absolute inset-y-0 my-auto size-4 text-muted-foreground ltr:left-3 rtl:right-3" />
+      <Input
+        {...props}
+        type={show ? "text" : "password"}
+        className={cn("ltr:pl-9 ltr:pr-10 rtl:pl-10 rtl:pr-9", props.className)}
+      />
+      <button
+        type="button"
+        onClick={() => setShow((s) => !s)}
+        aria-label={show ? "hide password" : "show password"}
+        className="absolute inset-y-0 my-auto grid size-7 place-items-center rounded-lg text-muted-foreground transition-colors hover:text-foreground ltr:right-2 rtl:left-2"
+      >
+        {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+      </button>
     </div>
   );
 }
@@ -143,6 +193,7 @@ export function SocialButtons() {
           type="button"
           className="shine-sweep gap-2 rounded-xl transition-transform duration-300 hover:-translate-y-0.5"
         >
+          <Chrome className="size-4 text-primary" />
           <span className="font-semibold">Google</span>
         </Button>
         <Button
@@ -150,6 +201,7 @@ export function SocialButtons() {
           type="button"
           className="shine-sweep gap-2 rounded-xl transition-transform duration-300 hover:-translate-y-0.5"
         >
+          <Apple className="size-4" />
           <span className="font-semibold">Apple</span>
         </Button>
       </div>
