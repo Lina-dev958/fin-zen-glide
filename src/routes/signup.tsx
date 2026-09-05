@@ -1,9 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { CreditCard, Mail, Shield, Sparkles, User } from "lucide-react";
+import { CreditCard, Mail, Shield, Sparkles, User, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { AuthHeading, AuthShell, SocialButtons } from "@/components/auth-shell";
+import { AuthHeading, AuthShell, PasswordInput, SocialButtons } from "@/components/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -79,7 +79,7 @@ function SignupPage() {
         </div>
       }
     >
-      <AuthHeading title={t("auth.signup.title")} sub={t("auth.signup.sub")} />
+      <AuthHeading icon={UserPlus} title={t("auth.signup.title")} sub={t("auth.signup.sub")} />
       <form className="space-y-4" onSubmit={submit} noValidate>
         <div className="space-y-2">
           <Label htmlFor="name">{t("auth.fullName")}</Label>
@@ -113,9 +113,8 @@ function SignupPage() {
 
         <div className="space-y-2">
           <Label htmlFor="spw">{t("auth.password")}</Label>
-          <Input
+          <PasswordInput
             id="spw"
-            type="password"
             value={form.pw}
             onChange={(e) => set("pw", e.target.value)}
             placeholder={t("auth.passwordPh")}
@@ -126,9 +125,8 @@ function SignupPage() {
 
         <div className="space-y-2">
           <Label htmlFor="sconf">{t("auth.confirm")}</Label>
-          <Input
+          <PasswordInput
             id="sconf"
-            type="password"
             value={form.confirm}
             onChange={(e) => set("confirm", e.target.value)}
             placeholder={t("auth.confirmPh")}

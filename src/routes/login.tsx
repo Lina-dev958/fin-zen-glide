@@ -1,9 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Mail } from "lucide-react";
+import { LogIn, Mail } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { AuthHeading, AuthShell, SocialButtons } from "@/components/auth-shell";
+import { AuthHeading, AuthShell, PasswordInput, SocialButtons } from "@/components/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -62,7 +62,7 @@ function LoginPage() {
         </div>
       }
     >
-      <AuthHeading title={t("auth.login.title")} sub={t("auth.login.sub")} />
+      <AuthHeading icon={LogIn} title={t("auth.login.title")} sub={t("auth.login.sub")} />
       <form className="space-y-4" onSubmit={submit} noValidate>
         <div className="space-y-2">
           <Label htmlFor="id">{t("auth.identifier")}</Label>
@@ -86,9 +86,8 @@ function LoginPage() {
               {t("auth.forgot")}
             </Link>
           </div>
-          <Input
+          <PasswordInput
             id="pw"
-            type="password"
             value={pw}
             onChange={(e) => setPw(e.target.value)}
             placeholder="••••••••"
