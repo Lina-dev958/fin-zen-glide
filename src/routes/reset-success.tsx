@@ -25,8 +25,9 @@ function SuccessPage() {
       asideSub={t("auth.aside.success.sub")}
     >
       <AuthSteps step={4} />
-      <div className="grid place-items-center">
-        <span className="grid size-16 place-items-center rounded-full bg-success text-success-foreground">
+      <div className="relative grid place-items-center py-2">
+        <span className="absolute size-16 rounded-full bg-success/40 animate-pulse-ring" />
+        <span className="relative grid size-16 place-items-center rounded-full bg-success text-success-foreground shadow-[0_18px_40px_-16px_var(--success)] animate-float">
           <Check className="size-8" />
         </span>
       </div>
