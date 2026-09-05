@@ -25,13 +25,14 @@ function SuccessPage() {
       asideSub={t("auth.aside.success.sub")}
     >
       <AuthSteps step={4} />
-      <div className="grid place-items-center">
-        <span className="grid size-16 place-items-center rounded-full bg-success text-success-foreground">
+      <div className="relative grid place-items-center py-2">
+        <span className="absolute size-16 rounded-full bg-success/40 animate-pulse-ring" />
+        <span className="relative grid size-16 place-items-center rounded-full bg-success text-success-foreground shadow-[0_18px_40px_-16px_var(--success)] animate-float">
           <Check className="size-8" />
         </span>
       </div>
       <AuthHeading title={t("auth.success.title")} sub={t("auth.success.sub")} />
-      <Button asChild className="w-full gradient-brand">
+      <Button asChild className="shine-sweep h-11 w-full rounded-xl gradient-brand shadow-[0_10px_30px_-12px_var(--primary)] transition-transform duration-300 hover:-translate-y-0.5 active:translate-y-0">
         <Link to="/login">{t("auth.backToLogin")}</Link>
       </Button>
     </AuthShell>

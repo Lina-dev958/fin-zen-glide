@@ -74,7 +74,7 @@ function VerifyPage() {
               onChange={(e) => setDigit(i, e.target.value)}
               inputMode="numeric"
               aria-label={`digit ${i + 1}`}
-              className="focus-ringed size-14 rounded-2xl border border-input bg-surface-muted text-center text-xl font-semibold text-foreground"
+              className={`focus-ringed size-14 rounded-2xl border bg-surface-muted text-center text-xl font-semibold text-foreground transition-all duration-300 focus:-translate-y-0.5 ${d ? "border-primary bg-primary/5 shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_14%,transparent)]" : "border-input"}`}
             />
           ))}
         </div>
@@ -94,7 +94,7 @@ function VerifyPage() {
             {t("auth.resend")}
           </button>
         </p>
-        <Button type="submit" className="w-full gradient-brand">
+        <Button type="submit" className="shine-sweep h-11 w-full rounded-xl gradient-brand shadow-[0_10px_30px_-12px_var(--primary)] transition-transform duration-300 hover:-translate-y-0.5 active:translate-y-0">
           {t("common.confirm")}
         </Button>
       </form>

@@ -150,7 +150,7 @@ function SignupPage() {
         </label>
         {err.agree ? <p className="text-xs text-destructive">{err.agree}</p> : null}
 
-        <Button type="submit" className="w-full gradient-brand" disabled={busy}>
+        <Button type="submit" className="shine-sweep h-11 w-full rounded-xl gradient-brand shadow-[0_10px_30px_-12px_var(--primary)] transition-transform duration-300 hover:-translate-y-0.5 active:translate-y-0" disabled={busy}>
           {busy ? t("common.saving") : t("auth.signup")}
         </Button>
       </form>
