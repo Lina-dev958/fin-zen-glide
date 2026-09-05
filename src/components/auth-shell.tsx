@@ -104,7 +104,7 @@ export function AuthShell({
             {asideExtra ? <div className="mt-8">{asideExtra}</div> : null}
             <div className="mt-10 flex items-center justify-center gap-4 text-[11px] font-medium text-primary-foreground/80">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-3 py-1.5 backdrop-blur">
-                <ShieldCheck className="size-3.5" /> 256-bit
+                <ShieldCheck className="size-3.5" /> <span dir="ltr">256-bit</span>
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-3 py-1.5 backdrop-blur">
                 <Sparkles className="size-3.5" /> AI
