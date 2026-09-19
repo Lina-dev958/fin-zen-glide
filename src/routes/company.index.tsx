@@ -14,6 +14,7 @@ import {
   Check,
   CheckCircle2,
   CircleDollarSign,
+  ClipboardCheck,
   Clock3,
   FileCheck2,
   FolderKanban,
@@ -118,7 +119,7 @@ const text = {
   },
 } as const;
 
-type Copy = typeof text.en;
+type Copy = Record<keyof typeof text.en, string>;
 type StateMode = "normal" | "loading" | "error" | "empty" | "permission" | "caught";
 
 const cashFlow = [
@@ -135,13 +136,13 @@ const requestRows = [
   { initials: "OK", name: "Omar Khalil", nameAr: "عمر خليل", title: "office", dept: "operations", amount: 3400, currency: "ILS", date: "18 Sep", status: "submitted" },
   { initials: "MN", name: "Maya Nasser", nameAr: "مايا ناصر", title: "software", dept: "it", amount: 2800, currency: "USD", date: "17 Sep", status: "needsChanges" },
   { initials: "YA", name: "Yousef Ali", nameAr: "يوسف علي", title: "event", dept: "marketing", amount: 6200, currency: "ILS", date: "16 Sep", status: "approved" },
-];
+] as const;
 
 const approvalRows = [
   { initials: "SA", name: "Sara Ahmed", nameAr: "سارة أحمد", purpose: "travel", dept: "sales", project: "Website Redesign", projectAr: "إعادة تصميم الموقع", amount: 1250, currency: "USD", priority: "high", date: "18 Sep" },
   { initials: "OK", name: "Omar Khalil", nameAr: "عمر خليل", purpose: "office", dept: "operations", project: "Operations", projectAr: "العمليات", amount: 3400, currency: "ILS", priority: "medium", date: "18 Sep" },
   { initials: "LN", name: "Lina Nasser", nameAr: "لينا ناصر", purpose: "inventory", dept: "operations", project: "Mobile App", projectAr: "تطبيق الجوال", amount: 1850, currency: "ILS", priority: "high", date: "17 Sep" },
-];
+] as const;
 
 const departments = [
   { key: "marketing", icon: ChartNoAxesCombined, budget: 48000, spent: 43200, currency: "ILS" },
@@ -220,7 +221,7 @@ function ProjectOverview({ c, lang }: { c: Copy; lang: "en" | "ar" }) {
 }
 
 function Advances({ c, lang }: { c: Copy; lang: "en" | "ar" }) {
-  return <SectionCard title={c.advances} padded={false} action={<Button asChild variant="ghost" size="sm"><Link to="/company/$section" params={{ section: "advances" }}>{c.viewAdvances}<ArrowRight /></Link></Button>}><Table><TableHeader><TableRow><TableHead>{c.employee}</TableHead><TableHead>{c.amount}</TableHead><TableHead>{c.issueDate}</TableHead><TableHead>{c.settlement}</TableHead></TableRow></TableHeader><TableBody>{advances.map((row) => <TableRow key={row.name}><TableCell className="font-medium">{lang === "ar" ? row.nameAr : row.name}</TableCell><TableCell className="font-semibold tabular-nums">{formatMoney(row.amount, row.currency, lang)}</TableCell><TableCell>{row.date}</TableCell><TableCell><StatusBadge label={c[row.status]} tone={row.status === "settlementRequired" ? "danger" : row.status === "closed" ? "success" : "info"} /></TableCell></TableRow>)}</TableBody></Table></SectionCard>;
+  return <SectionCard title={c.advances} padded={false} action={<Button asChild variant="ghost" size="sm"><Link to="/company/$section" params={{ section: "advances" }}>{c.viewAdvances}<ArrowRight /></Link></Button>}><Table><TableHeader><TableRow><TableHead>{c.employee}</TableHead><TableHead>{c.amount}</TableHead><TableHead>{c.issueDate}</TableHead><TableHead>{c.settlement}</TableHead></TableRow></TableHeader><TableBody>{advances.map((row) => <TableRow key={row.name}><TableCell className="font-medium">{lang === "ar" ? row.nameAr : row.name}</TableCell><TableCell className="font-semibold tabular-nums">{formatMoney(row.amount, row.currency, lang)}</TableCell><TableCell>{row.date}</TableCell><TableCell><StatusBadge label={c[row.status]} tone={row.status === "settlementRequired" ? "danger" : "info"} /></TableCell></TableRow>)}</TableBody></Table></SectionCard>;
 }
 
 function ActivityFeed({ c }: { c: Copy }) {

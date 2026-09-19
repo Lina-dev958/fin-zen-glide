@@ -297,7 +297,8 @@ function CompanyNav({ onNavigate }: { onNavigate?: () => void }) {
         <div key={group.label} className="space-y-1">
           <p className="px-3 pb-1 text-[10px] font-semibold uppercase text-muted-foreground">{c[group.label]}</p>
           {group.items.map((item) => {
-            const allowed = item.permission === "approve" ? canApprove : item.permission === "configure" ? canConfigure : true;
+            const permission = "permission" in item ? item.permission : undefined;
+            const allowed = permission === "approve" ? canApprove : permission === "configure" ? canConfigure : true;
             const path = item.slug ? `/company/${item.slug}` : "/company";
             const active = pathname === path;
             const Icon = item.icon;
