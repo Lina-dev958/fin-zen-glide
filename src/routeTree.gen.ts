@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as BudgetsRouteImport } from './routes/budgets'
+import { Route as CompanyRouteImport } from './routes/company'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as ImportRouteImport } from './routes/import'
@@ -27,6 +28,8 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as TransactionsRouteImport } from './routes/transactions'
 import { Route as VerifyCodeRouteImport } from './routes/verify-code'
+import { Route as CompanyIndexRouteImport } from './routes/company.index'
+import { Route as CompanySectionRouteImport } from './routes/company.$section'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +49,11 @@ const AssistantRoute = AssistantRouteImport.update({
 const BudgetsRoute = BudgetsRouteImport.update({
   id: '/budgets',
   path: '/budgets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanyRoute = CompanyRouteImport.update({
+  id: '/company',
+  path: '/company',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -118,12 +126,23 @@ const VerifyCodeRoute = VerifyCodeRouteImport.update({
   path: '/verify-code',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompanyIndexRoute = CompanyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CompanyRoute,
+} as any)
+const CompanySectionRoute = CompanySectionRouteImport.update({
+  id: '/$section',
+  path: '/$section',
+  getParentRoute: () => CompanyRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
+  '/company': typeof CompanyRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
@@ -138,6 +157,8 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
   '/verify-code': typeof VerifyCodeRoute
+  '/company/$section': typeof CompanySectionRoute
+  '/company/': typeof CompanyIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -158,6 +179,8 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
   '/verify-code': typeof VerifyCodeRoute
+  '/company/$section': typeof CompanySectionRoute
+  '/company': typeof CompanyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -165,6 +188,7 @@ export interface FileRoutesById {
   '/accounts': typeof AccountsRoute
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
+  '/company': typeof CompanyRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
@@ -179,6 +203,8 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/transactions': typeof TransactionsRoute
   '/verify-code': typeof VerifyCodeRoute
+  '/company/$section': typeof CompanySectionRoute
+  '/company/': typeof CompanyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -187,6 +213,7 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/assistant'
     | '/budgets'
+    | '/company'
     | '/forgot-password'
     | '/goals'
     | '/import'
@@ -201,6 +228,8 @@ export interface FileRouteTypes {
     | '/signup'
     | '/transactions'
     | '/verify-code'
+    | '/company/$section'
+    | '/company/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,12 +250,15 @@ export interface FileRouteTypes {
     | '/signup'
     | '/transactions'
     | '/verify-code'
+    | '/company/$section'
+    | '/company'
   id:
     | '__root__'
     | '/'
     | '/accounts'
     | '/assistant'
     | '/budgets'
+    | '/company'
     | '/forgot-password'
     | '/goals'
     | '/import'
@@ -241,6 +273,8 @@ export interface FileRouteTypes {
     | '/signup'
     | '/transactions'
     | '/verify-code'
+    | '/company/$section'
+    | '/company/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -248,6 +282,7 @@ export interface RootRouteChildren {
   AccountsRoute: typeof AccountsRoute
   AssistantRoute: typeof AssistantRoute
   BudgetsRoute: typeof BudgetsRoute
+  CompanyRoute: typeof CompanyRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GoalsRoute: typeof GoalsRoute
   ImportRoute: typeof ImportRoute
@@ -292,6 +327,13 @@ declare module '@tanstack/react-router' {
       path: '/budgets'
       fullPath: '/budgets'
       preLoaderRoute: typeof BudgetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/company': {
+      id: '/company'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof CompanyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -392,14 +434,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifyCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/company/': {
+      id: '/company/'
+      path: '/'
+      fullPath: '/company/'
+      preLoaderRoute: typeof CompanyIndexRouteImport
+      parentRoute: typeof CompanyRoute
+    }
+    '/company/$section': {
+      id: '/company/$section'
+      path: '/$section'
+      fullPath: '/company/$section'
+      preLoaderRoute: typeof CompanySectionRouteImport
+      parentRoute: typeof CompanyRoute
+    }
   }
 }
+
+interface CompanyRouteChildren {
+  CompanySectionRoute: typeof CompanySectionRoute
+  CompanyIndexRoute: typeof CompanyIndexRoute
+}
+
+const CompanyRouteChildren: CompanyRouteChildren = {
+  CompanySectionRoute: CompanySectionRoute,
+  CompanyIndexRoute: CompanyIndexRoute,
+}
+
+const CompanyRouteWithChildren =
+  CompanyRoute._addFileChildren(CompanyRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRoute,
   AssistantRoute: AssistantRoute,
   BudgetsRoute: BudgetsRoute,
+  CompanyRoute: CompanyRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GoalsRoute: GoalsRoute,
   ImportRoute: ImportRoute,
