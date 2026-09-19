@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as BudgetsRouteImport } from './routes/budgets'
+import { Route as CompanyRouteImport } from './routes/company'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as ImportRouteImport } from './routes/import'
@@ -46,6 +47,11 @@ const AssistantRoute = AssistantRouteImport.update({
 const BudgetsRoute = BudgetsRouteImport.update({
   id: '/budgets',
   path: '/budgets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanyRoute = CompanyRouteImport.update({
+  id: '/company',
+  path: '/company',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/accounts': typeof AccountsRoute
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
+  '/company': typeof CompanyRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/accounts': typeof AccountsRoute
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
+  '/company': typeof CompanyRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
@@ -165,6 +173,7 @@ export interface FileRoutesById {
   '/accounts': typeof AccountsRoute
   '/assistant': typeof AssistantRoute
   '/budgets': typeof BudgetsRoute
+  '/company': typeof CompanyRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/goals': typeof GoalsRoute
   '/import': typeof ImportRoute
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/assistant'
     | '/budgets'
+    | '/company'
     | '/forgot-password'
     | '/goals'
     | '/import'
@@ -207,6 +217,7 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/assistant'
     | '/budgets'
+    | '/company'
     | '/forgot-password'
     | '/goals'
     | '/import'
@@ -227,6 +238,7 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/assistant'
     | '/budgets'
+    | '/company'
     | '/forgot-password'
     | '/goals'
     | '/import'
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   AccountsRoute: typeof AccountsRoute
   AssistantRoute: typeof AssistantRoute
   BudgetsRoute: typeof BudgetsRoute
+  CompanyRoute: typeof CompanyRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GoalsRoute: typeof GoalsRoute
   ImportRoute: typeof ImportRoute
@@ -292,6 +305,13 @@ declare module '@tanstack/react-router' {
       path: '/budgets'
       fullPath: '/budgets'
       preLoaderRoute: typeof BudgetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/company': {
+      id: '/company'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof CompanyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -400,6 +420,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsRoute: AccountsRoute,
   AssistantRoute: AssistantRoute,
   BudgetsRoute: BudgetsRoute,
+  CompanyRoute: CompanyRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GoalsRoute: GoalsRoute,
   ImportRoute: ImportRoute,
